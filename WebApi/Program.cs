@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using WebApi.Repositories;
 
 namespace WebApi
 {
@@ -7,7 +9,10 @@ namespace WebApi
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
-			// Add services to the container.
+			//Dbcontexte ihtiyacim oldugunda reposcontext ver, di ioc
+			//injection 3 kýsma ayrilir once kayit islemi sonra cozme islemi sonrada yasam suresi (Register, Resolve, Dispose)
+			builder.Services.AddDbContext<RepositoryContext>(options =>
+				options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection")));
 
 			builder.Services.AddControllers();
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -24,7 +29,6 @@ namespace WebApi
 			}
 
 			app.UseAuthorization();
-
 
 			app.MapControllers();
 
