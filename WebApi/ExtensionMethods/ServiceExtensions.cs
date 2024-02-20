@@ -2,6 +2,8 @@
 using Repositories.Context;
 using Repositories.RepoConcrete;
 using Repositories.RepoContracts;
+using Services.Concrete;
+using Services.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace WebApi.ExtensionMethods
@@ -17,6 +19,11 @@ namespace WebApi.ExtensionMethods
 		{
 			services.AddScoped<IRepositoryManager, RepositoryManager>();
 			services.AddScoped<IBookRepository, BookRepository>();
+		}
+		public static void ServiceInjections(this IServiceCollection services)
+		{
+			services.AddScoped<IServiceManager, ServiceManager>();
+			services.AddScoped<IBookService, BookService>();
 		}
 	}
 }
