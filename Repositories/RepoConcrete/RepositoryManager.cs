@@ -14,13 +14,28 @@ namespace Repositories.RepoConcrete
 	public class RepositoryManager : IRepositoryManager
 	{
 		private readonly RepositoryContext _context;
-		private readonly IBookRepository _bookRepository;
-		public RepositoryManager(RepositoryContext context, IBookRepository bookRepository)
+		private readonly Lazy<IBookRepository> _bookRepository;
+		#region Lazy loading & Eager loading
+		/*
+		eager loading tek seferde iliskili verileri(relationship)birincil nesne(örn kitap)ile birlikte butun verileri(kitabın yazari) ihtiyac duyulmaksizin onceden yukler ve tum dataları dbden alir,
+		join islemi kullanir, tum dataların birlesmis halde alınmasini saglar, ihtiyac olmamasina ragmen getirdigi icin performans duser ve bellek kullanimini artirir
+
+		lazy loading iliskili nesneleri, birincil nesne ile beraber yuklemez, bir nesneye ihtiyac duyuldugu anda yuklenecegi anlamına gelir
+		iliskili verilere erisildiginde veya cagrildiginda ek sorgular yaparak veri yuklenir ve ek sorgular yapildigi icin performansi olumsuz etkileyebilir
+		ancak sadece ihtiyac duyuldugu anda verileri getireceginden performans artisi ve bellek kullanimini da azaltabilir.
+
+		ozetle eager loading tek seferde butun veriyi cekerken, lazy loading ihtiyac duyuldugu anda getirir ancak her seferinde sorgu atar(n+1 problem)
+		cok fazla sayida kaydimiz var ise 5000, 10000 gibi
+		eager loading hepsini iliskisel verilerle beraber tek seferde yuklerken
+		lazy loading her biri icin sorgu atacaktır ve eagera gore daha maliyetli olacaktır
+		 */
+		#endregion
+		public RepositoryManager(RepositoryContext context, Lazy<IBookRepository> bookRepository)
 		{
 			_context = context;
 			_bookRepository = bookRepository; 
 		}
-		public IBookRepository BookRepository => _bookRepository;
+		public IBookRepository BookRepository => _bookRepository.Value;
 		public void Save()
 		{
 			_context.SaveChanges();
