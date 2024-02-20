@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using WebApi.Repositories;
+using Repositories.Context;
 
 namespace WebApi
 {
-	public class Program
+    public class Program
 	{
 		public static void Main(string[] args)
 		{
