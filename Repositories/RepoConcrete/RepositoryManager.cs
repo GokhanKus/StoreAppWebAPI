@@ -14,7 +14,8 @@ namespace Repositories.RepoConcrete
 	public class RepositoryManager : IRepositoryManager
 	{
 		private readonly RepositoryContext _context;
-		private readonly Lazy<IBookRepository> _bookRepository;
+		private readonly IBookRepository _bookRepository;
+		//private readonly Lazy<IBookRepository> _bookRepository;
 		#region Lazy loading & Eager loading
 		/*
 		eager loading tek seferde iliskili verileri(relationship)birincil nesne(örn kitap)ile birlikte butun verileri(kitabın yazari) ihtiyac duyulmaksizin onceden yukler ve tum dataları dbden alir,
@@ -30,12 +31,13 @@ namespace Repositories.RepoConcrete
 		lazy loading her biri icin sorgu atacaktır ve eagera gore daha maliyetli olacaktır
 		 */
 		#endregion
-		public RepositoryManager(RepositoryContext context, Lazy<IBookRepository> bookRepository)
+		public RepositoryManager(RepositoryContext context, IBookRepository bookRepository)
 		{
 			_context = context;
-			_bookRepository = bookRepository; 
+			_bookRepository = bookRepository;
+			/*new Lazy<IBookRepository>(() => new BookRepository(_context));*/
 		}
-		public IBookRepository BookRepository => _bookRepository.Value;
+		public IBookRepository BookRepository => _bookRepository;
 		public void Save()
 		{
 			_context.SaveChanges();

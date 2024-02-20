@@ -15,16 +15,13 @@ namespace Repositories.RepoConcrete
 		{
 
 		}
-
 		public void CreateOneBook(Book book) => Create(book);
 		public void UpdateOneBook(Book book) => Update(book);
 		public void DeleteOneBook(Book book) => Delete(book);
 		public IQueryable<Book> GetAllBooks(bool trackChanges) => FindAll(trackChanges);
-
 		public Book? GetOneBookById(int id, bool trackChanges)
 		{
-			return FindByCondition(b => b.Id.Equals(id), trackChanges);
+			return FindByCondition(b => b.Id.Equals(id), trackChanges).SingleOrDefault();
 		}
-
 	}
 }
