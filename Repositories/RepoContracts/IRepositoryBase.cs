@@ -10,8 +10,8 @@ namespace Repositories.RepoContracts
 	public interface IRepositoryBase<TEntity>
 	{
 		IQueryable<TEntity> FindAll(bool trackChanges);
-		IQueryable<TEntity> FindByCondition(Expression <Func<TEntity, bool>> expression, bool trackChanges); //burası sorgu sonucu bir varlık koleksiyonu döndürür, tek bir entity dondurmek istiyorsak IQueryable silersin
-		void Create(TEntity entity); 
+		TEntity? FindByCondition(Expression <Func<TEntity, bool>> expression, bool trackChanges); //burası sorgu sonucu bir varlık koleksiyonu döndürür, tek bir entity dondurmek istiyorsak IQueryable silersin
+		void Create(TEntity entity);
 		void Update(TEntity entity); 
 		void Delete(TEntity entity); 
 	}
