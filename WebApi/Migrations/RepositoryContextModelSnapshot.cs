@@ -6,8 +6,6 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repositories.Context;
 
-
-
 #nullable disable
 
 namespace WebApi.Migrations
@@ -24,7 +22,7 @@ namespace WebApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("WebApi.Models.Book", b =>
+            modelBuilder.Entity("Entities.Models.Book", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -50,28 +48,28 @@ namespace WebApi.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedTime = new DateTime(2024, 2, 19, 15, 8, 12, 685, DateTimeKind.Local).AddTicks(8823),
+                            CreatedTime = new DateTime(2024, 2, 21, 13, 10, 35, 993, DateTimeKind.Local).AddTicks(2637),
                             Price = 60.5m,
                             Title = "Hacigoz ve Karivat"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedTime = new DateTime(2024, 2, 19, 15, 8, 12, 685, DateTimeKind.Local).AddTicks(8830),
+                            CreatedTime = new DateTime(2024, 2, 21, 13, 10, 35, 993, DateTimeKind.Local).AddTicks(2642),
                             Price = 150m,
                             Title = "Tufek, Mikrop ve Celik"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedTime = new DateTime(2024, 2, 19, 15, 8, 12, 685, DateTimeKind.Local).AddTicks(8832),
+                            CreatedTime = new DateTime(2024, 2, 21, 13, 10, 35, 993, DateTimeKind.Local).AddTicks(2645),
                             Price = 250m,
                             Title = "Devlet"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedTime = new DateTime(2024, 2, 19, 15, 8, 12, 685, DateTimeKind.Local).AddTicks(8835),
+                            CreatedTime = new DateTime(2024, 2, 21, 13, 10, 35, 993, DateTimeKind.Local).AddTicks(2647),
                             Price = 45m,
                             Title = "Mesnevi"
                         });
