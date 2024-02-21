@@ -17,7 +17,9 @@ namespace WebApi
 			builder.Services.RepositoryInjections();
 			builder.Services.ServiceInjections();
 
-			builder.Services.AddControllers().AddNewtonsoftJson();
+			builder.Services.AddControllers()
+				.AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly)
+				.AddNewtonsoftJson();
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();

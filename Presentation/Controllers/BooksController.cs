@@ -1,16 +1,18 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Entities.Models;
-using Repositories.Context;
-using Repositories.RepoContracts;
+﻿using Entities.Models;
+using Microsoft.AspNetCore.JsonPatch; //for [HttpPatch]
+using Microsoft.AspNetCore.Mvc; //bir sınıfa controller olma ozelligini kazandırır
 using Services.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace WebApi.Controllers
+namespace Presentation.Controllers
 {
-    [Route("api/[controller]")]
 	[ApiController]
+	[Route("api/books")]
 	public class BooksController : ControllerBase
 	{
 		private readonly IServiceManager _manager;
@@ -50,7 +52,7 @@ namespace WebApi.Controllers
 				throw new Exception(ex.Message);
 			}
 		}
-		
+
 		[HttpPost]
 		public IActionResult CreateOneBook([FromBody] Book book)
 		{
@@ -70,7 +72,7 @@ namespace WebApi.Controllers
 		}
 
 		[HttpPut("{id:int}")]
-		public IActionResult UpdateOneBook([FromRoute(Name = "id")] int id,[FromBody] Book book)
+		public IActionResult UpdateOneBook([FromRoute(Name = "id")] int id, [FromBody] Book book)
 		{
 			try
 			{
@@ -100,7 +102,7 @@ namespace WebApi.Controllers
 			}
 		}
 		[HttpPatch("{id:int}")]
-		public IActionResult PartiallyUpdateOneBook([FromRoute(Name = "id")] int id,[FromBody] JsonPatchDocument<Book> bookPatch)
+		public IActionResult PartiallyUpdateOneBook([FromRoute(Name = "id")] int id, [FromBody] JsonPatchDocument<Book> bookPatch)
 		{
 			try
 			{
