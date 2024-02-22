@@ -1,4 +1,5 @@
 ﻿using Entities.ErrorModel;
+using Entities.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Services.Contracts;
 using System.Net;
@@ -13,16 +14,21 @@ namespace WebApi.ExtensionMethods
 			{
 				appError.Run(async context =>
 				{
-					context.Response.StatusCode = (int)HttpStatusCode.InternalServerError; //StatusCodes.Status500InternalServerError;(ilerde customize edilecek simdilik 500 atayalım)
+					//context.Response.StatusCode = (int)HttpStatusCode.InternalServerError; //StatusCodes.Status500InternalServerError;(ilerde customize edilecek simdilik 500 atayalım)
 					context.Response.ContentType = "application/json";
 					var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
 					if (contextFeature is not null) //null degilse hata gelmis demektir, boyle de yazılabilir contextFeature?.Error is FileNotFoundException
 					{
+						context.Response.StatusCode = contextFeature.Error switch
+						{
+							NotFoundException => StatusCodes.Status404NotFound,
+							_ => StatusCodes.Status500InternalServerError
+						};
 						logger.LogError($"Something went wrong: {contextFeature.Error}");
 						await context.Response.WriteAsync(new ErrorDetails()
 						{
 							StatusCode = context.Response.StatusCode,
-							Message = "Internal Server Error"
+							Message = contextFeature.Error.Message
 						}.ToString());
 					}
 				});
