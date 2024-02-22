@@ -27,4 +27,8 @@ LogDebug: Hata ayıklama sürecinde kullanılan bilgi düzeyindeki mesajları ka
 LogError: Uygulamada bir hata meydana geldiğinde kaydedilmesi gereken mesajları belirler.
 LogInfo: Uygulamanın normal çalışması sırasında kaydedilmesi gereken bilgilendirici mesajları sağlar.
 LogWarning: Dikkat edilmesi gereken potansiyel sorunları belirten mesajları kaydeder.
+
+nlog.config dosyasindaki yapilandirma sonucu asagidaki dosyalar olustu
+C:\ASP.NET_Projects\StoreAppWebAPI\WebApi\internal_logs\internallog.txt
+C:\ASP.NET_Projects\StoreAppWebAPI\WebApi\bin\Debug\net8.0\logs\2024-02-22_logfile.txt
 */
