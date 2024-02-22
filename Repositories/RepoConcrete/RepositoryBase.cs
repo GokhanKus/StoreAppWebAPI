@@ -15,7 +15,7 @@ namespace Repositories.RepoConcrete
 	{
 		protected readonly RepositoryContext _context;
 		//burayi protected yaptik, cunku bu classı kalitim ile farklı repository.cslerde(classlarda) kullanırken buradaki contexti kullanmak isteriz
-		//orn public BookRepository(RepositoryContext context) : base(context) yazarak buradaki contexti kullanmak isteriz
+		//orn BookRepository.cs'te public BookRepository(RepositoryContext context) : base(context) yazarak buradaki contexti kullanmak isteriz
 		protected RepositoryBase(RepositoryContext context)
 		{
 			_context = context;
