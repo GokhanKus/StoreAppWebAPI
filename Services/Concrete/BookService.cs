@@ -1,4 +1,5 @@
-﻿using Entities.Models;
+﻿using Entities.Exceptions;
+using Entities.Models;
 using Repositories.RepoContracts;
 using Services.Contracts;
 using System;
@@ -28,12 +29,8 @@ namespace Services.Concrete
 		{
 			var book = _manager.BookRepository.GetOneBookById(id, trackChanges);
 			if (book is null)
-			{
-				string message = $"the book with id:{id} could not found";
-				_logger.LogInfo(message);
-				throw new Exception(message);
-			}
-		
+				throw new BookNotFoundException(id); //refactoring saglamis olduk; refactoring, kodun daha kısa ve anlasilir olmasina denir
+
 			_manager.BookRepository.DeleteOneBook(book);
 			_manager.Save();
 		}
@@ -43,18 +40,17 @@ namespace Services.Concrete
 		}
 		public Book? GetOneBookById(int id, bool trackChanges)
 		{
-			return _manager.BookRepository.GetOneBookById(id, trackChanges);
+			var book = _manager.BookRepository.GetOneBookById(id, trackChanges);
+			if (book is null)
+				throw new BookNotFoundException(id);    //return NotFound(); 404
+			return book;
 		}
 		public void UpdateOneBook(int id, Book book, bool trackChanges)
 		{
 			var entity = _manager.BookRepository.GetOneBookById(id, trackChanges);
 			if (entity is null)
-			{
-				string msg = $"the book with id:{id} could not found";
-				_logger.LogInfo(msg);
-				throw new Exception(msg);
-			}
-			
+				throw new BookNotFoundException(id);
+
 			entity.Title = book.Title;
 			entity.Price = book.Price;
 

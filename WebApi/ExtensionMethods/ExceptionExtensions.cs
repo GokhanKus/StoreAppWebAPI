@@ -65,4 +65,5 @@ mesela olmayan bir kaynagi silerken alacagimiz output
   "Message": "Internal Server Error"
 }
  */
+//contextFeature.Error = Entities.Exceptions.BookNotFoundException: olabilir
 #endregion
