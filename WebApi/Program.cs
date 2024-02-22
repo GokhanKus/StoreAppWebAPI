@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using NLog;
 using Repositories.Context;
+using Services.Contracts;
 using WebApi.ExtensionMethods;
 
 namespace WebApi
@@ -27,11 +28,18 @@ namespace WebApi
 
 			var app = builder.Build();
 
+			var logger = app.Services.GetRequiredService<ILoggerService>(); //uygulamayi elde ettigimiz asama (var app = builder.Build())'dan sonra ihtiyac duyulan servis alýnabilir.
+			app.ConfigureExceptionHandler(logger);
+
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
 			{
 				app.UseSwagger();
 				app.UseSwaggerUI();
+			}
+			if (app.Environment.IsProduction())
+			{
+				app.UseHsts();
 			}
 
 			app.UseAuthorization();
