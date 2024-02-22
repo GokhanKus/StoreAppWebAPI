@@ -52,5 +52,11 @@ Loglama işlemi, ILoggerService arayüzünü uygulayan bir servis aracılığıy
 
 HTTP Yanıtı Oluşturma: 
 Son olarak, hata bilgileri JSON formatına dönüştürülür ve HTTP yanıtına yazılır. Bu, istemciye döndürülecek olan hata bilgilerini içeren JSON yanıtını oluşturur.
+
+mesela olmayan bir kaynagi silerken alacagimiz output
+{
+  "StatusCode": 500,
+  "Message": "Internal Server Error"
+}
  */
 #endregion
