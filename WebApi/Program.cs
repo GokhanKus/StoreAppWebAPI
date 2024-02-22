@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using NLog;
 using Repositories.Context;
 using WebApi.ExtensionMethods;
 
@@ -10,12 +11,12 @@ namespace WebApi
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
-			//Dbcontexte ihtiyacim oldugunda reposcontext ver, di ioc
-			//injection 3 kýsma ayrilir once kayit islemi sonra cozme islemi sonrada yasam suresi (Register, Resolve, Dispose)
-			
+			LogManager.Setup().LoadConfigurationFromFile(String.Concat(Directory.GetCurrentDirectory(), "/nlog.config")); //nlogu baslatip nlog.config dosyasindaki yapýlandirmayi yukler
+
 			builder.Services.SqlConfiguration(builder.Configuration);
 			builder.Services.RepositoryInjections();
 			builder.Services.ServiceInjections();
+			builder.Services.LoggerService();
 
 			builder.Services.AddControllers()
 				.AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly)

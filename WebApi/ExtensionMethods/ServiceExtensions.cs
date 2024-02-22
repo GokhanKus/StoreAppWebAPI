@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NLog.Common;
 using Repositories.Context;
 using Repositories.RepoConcrete;
 using Repositories.RepoContracts;
@@ -12,6 +13,8 @@ namespace WebApi.ExtensionMethods
 	{
 		public static void SqlConfiguration(this IServiceCollection services, IConfiguration configuration)
 		{
+			//Dbcontexte ihtiyacim oldugunda reposcontext ver, di ioc
+			//injection 3 kısma ayrilir once kayit islemi sonra cozme islemi sonrada yasam suresi (Register, Resolve, Dispose)
 			services.AddDbContext<RepositoryContext>(options =>
 				options.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
 		}
@@ -24,6 +27,10 @@ namespace WebApi.ExtensionMethods
 		{
 			services.AddScoped<IServiceManager, ServiceManager>();
 			services.AddScoped<IBookService, BookService>();
+		}
+		public static void LoggerService(this IServiceCollection services)
+		{
+			services.AddSingleton<ILoggerService, LoggerService>();
 		}
 	}
 }
