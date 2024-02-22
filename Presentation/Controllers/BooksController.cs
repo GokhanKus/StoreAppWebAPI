@@ -1,4 +1,5 @@
-﻿using Entities.Models;
+﻿using Entities.Exceptions;
+using Entities.Models;
 using Microsoft.AspNetCore.JsonPatch; //for [HttpPatch]
 using Microsoft.AspNetCore.Mvc; //bir sınıfa controller olma ozelligini kazandırır
 using Services.Contracts;
@@ -32,9 +33,6 @@ namespace Presentation.Controllers
 			var book = _manager
 			.BookService
 			.GetOneBookById(id, false);
-
-			if (book is null)
-				return NotFound(); //404
 
 			return Ok(book);
 		}
@@ -71,9 +69,6 @@ namespace Presentation.Controllers
 		{
 			// check entity
 			var entity = _manager.BookService.GetOneBookById(id, true);
-
-			if (entity is null)
-				return NotFound(); // 404
 
 			bookPatch.ApplyTo(entity);
 			_manager.BookService.UpdateOneBook(id, entity, true); //bu satir gereksiz olmasa da oluyor
