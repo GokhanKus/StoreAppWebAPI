@@ -1,4 +1,5 @@
-﻿using Entities.Exceptions;
+﻿using Entities.DTOs;
+using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.AspNetCore.JsonPatch; //for [HttpPatch]
 using Microsoft.AspNetCore.Mvc; //bir sınıfa controller olma ozelligini kazandırır
@@ -49,13 +50,13 @@ namespace Presentation.Controllers
 		}
 
 		[HttpPut("{id:int}")]
-		public IActionResult UpdateOneBook([FromRoute(Name = "id")] int id, [FromBody] Book book)
+		public IActionResult UpdateOneBook([FromRoute(Name = "id")] int id, [FromBody] BookDtoForUpdate bookDto)
 		{
-			if (book is null)
+			if (bookDto is null)
 				return BadRequest();
 
-			_manager.BookService.UpdateOneBook(id, book, true);
-			return Ok(book);
+			_manager.BookService.UpdateOneBook(id, bookDto, true);//degisiklikler izlenmeyecekse (false) service.cs'te _manager.BookRepository.Update(entity); yazılmali
+			return Ok(bookDto);
 		}
 
 		[HttpDelete("{id:int}")]
@@ -71,7 +72,7 @@ namespace Presentation.Controllers
 			var entity = _manager.BookService.GetOneBookById(id, true);
 
 			bookPatch.ApplyTo(entity);
-			_manager.BookService.UpdateOneBook(id, entity, true); //bu satir gereksiz olmasa da oluyor
+			_manager.BookService.UpdateOneBook(id, new BookDtoForUpdate(entity.Id, entity.Title, entity.Price), true); //bu satir gereksiz olmasa da oluyor
 
 			return NoContent(); // 204
 		}

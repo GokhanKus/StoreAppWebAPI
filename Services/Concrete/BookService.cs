@@ -1,4 +1,6 @@
-﻿using Entities.Exceptions;
+﻿using AutoMapper;
+using Entities.DTOs;
+using Entities.Exceptions;
 using Entities.Models;
 using Repositories.RepoContracts;
 using Services.Contracts;
@@ -14,10 +16,12 @@ namespace Services.Concrete
 	{
 		private readonly IRepositoryManager _manager;
 		private readonly ILoggerService _logger;
-		public BookService(IRepositoryManager manager, ILoggerService logger)
+		private readonly IMapper _mapper;
+		public BookService(IRepositoryManager manager, ILoggerService logger, IMapper mapper)
 		{
 			_manager = manager;
 			_logger = logger;
+			_mapper = mapper;
 		}
 		public Book CreateOneBook(Book book)
 		{
@@ -45,16 +49,19 @@ namespace Services.Concrete
 				throw new BookNotFoundException(id);    //return NotFound(); 404
 			return book;
 		}
-		public void UpdateOneBook(int id, Book book, bool trackChanges)
+		public void UpdateOneBook(int id, BookDtoForUpdate bookDto, bool trackChanges)
 		{
 			var entity = _manager.BookRepository.GetOneBookById(id, trackChanges);
 			if (entity is null)
 				throw new BookNotFoundException(id);
 
-			entity.Title = book.Title;
-			entity.Price = book.Price;
+			_mapper.Map(bookDto, entity);
 
-			//_manager.BookRepository.Update(entity); izlenen nesne degisiklerden sonra Update() olmadan da dogrudan save edilebilir
+			//entity = _mapper.Map<Book>(bookDto);
+			//_manager.BookRepository.Update(entity); //bu satir olacaksa trackchanges false olmali, izlenen nesne degisiklerden sonra Update() olmadan da dogrudan save edilebilir
+			
+			//entity.Title = bookDto.Title;
+			//entity.Price = bookDto.Price;
 			_manager.Save();
 		}
 	}
