@@ -19,6 +19,8 @@ namespace WebApi
 			builder.Services.ServiceInjections();
 			builder.Services.LoggerService();
 
+			builder.Services.AddAutoMapper(typeof(Program));//WebApi
+
 			builder.Services.AddControllers()
 				.AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly)
 				.AddNewtonsoftJson();
