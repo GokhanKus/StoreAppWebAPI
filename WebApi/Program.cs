@@ -21,7 +21,11 @@ namespace WebApi
 
 			builder.Services.AddAutoMapper(typeof(Program));//WebApi
 
-			builder.Services.AddControllers()
+			builder.Services.AddControllers(config =>
+			{
+				config.RespectBrowserAcceptHeader = true; //artik apimizin icerik pazarligina acik oldugunu ve
+				config.ReturnHttpNotAcceptable = true;    //kabul edilmeyen format oldugunda 406 koduyla geri donecegiz
+			})
 				.AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly)
 				.AddNewtonsoftJson();
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
