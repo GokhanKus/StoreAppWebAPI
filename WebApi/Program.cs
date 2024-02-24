@@ -25,7 +25,10 @@ namespace WebApi
 			{
 				config.RespectBrowserAcceptHeader = true; //artik apimizin icerik pazarligina acik oldugunu ve
 				config.ReturnHttpNotAcceptable = true;    //kabul edilmeyen format oldugunda 406 koduyla geri donecegiz
-			}).AddXmlDataContractSerializerFormatters() //xml dosya formatini kabul edecegimizi ve bu formatta output verilebilecegini belirtiyoruz
+
+			})
+			.AddCustomCsvFormatter()					//kendi yazmis oldugumuz custom csvformatter
+			.AddXmlDataContractSerializerFormatters() //xml dosya formatini kabul edecegimizi ve bu formatta output verilebilecegini belirtiyoruz
 			.AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly)
 			.AddNewtonsoftJson();
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
