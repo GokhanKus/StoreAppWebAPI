@@ -3,6 +3,7 @@ using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.AspNetCore.JsonPatch; //for [HttpPatch]
 using Microsoft.AspNetCore.Mvc; //bir sınıfa controller olma ozelligini kazandırır
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Services.Contracts;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,9 @@ namespace Presentation.Controllers
 		{
 			if (bookDto is null)
 				return BadRequest(); // 400 
+
+			if (!ModelState.IsValid) //model gecerli degilse 422 ile donelim
+				return UnprocessableEntity(ModelState); //program.cs'te SuppressModelStateInvalidFilter = true bu kısmı yazdiktan sonra bu if kontrolunu yapmazsak invalid olsa bile ekler
 
 			_manager.BookService.CreateOneBook(bookDto);
 
