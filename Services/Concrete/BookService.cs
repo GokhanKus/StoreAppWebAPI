@@ -51,6 +51,22 @@ namespace Services.Concrete
 				throw new BookNotFoundException(id);    //return NotFound(); 404  
 			return _mapper.Map<BookDto>(book); //veritabanından(book) BookDto turunde bir verinin donmesi saglandi
 		}
+
+		public (BookDtoForUpdate bookDtoForUpdate, Book book) GetOneBookForPatch(int id, bool trackChanges)
+		{
+			var book = _manager.BookRepository.GetOneBookById(id, trackChanges);
+			if (book is null) 
+				throw new BookNotFoundException(id);
+			var bookDtoForUpdate = _mapper.Map<BookDtoForUpdate>(book);
+			return (bookDtoForUpdate, book);
+		}
+
+		public void SaveChangesForPatch(BookDtoForUpdate bookDtoForUpdate, Book book)
+		{
+			_mapper.Map(bookDtoForUpdate, book);
+			_manager.Save();
+		}
+
 		public void UpdateOneBook(int id, BookDtoForUpdate bookDto, bool trackChanges)
 		{
 			var entity = _manager.BookRepository.GetOneBookById(id, trackChanges);

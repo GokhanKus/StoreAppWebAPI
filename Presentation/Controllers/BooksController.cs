@@ -61,7 +61,7 @@ namespace Presentation.Controllers
 			if (bookDto is null)
 				return BadRequest();
 
-			if (!ModelState.IsValid) 
+			if (!ModelState.IsValid)
 				return UnprocessableEntity(ModelState);
 
 			_manager.BookService.UpdateOneBook(id, bookDto, true);//degisiklikler izlenmeyecekse (false) service.cs'te _manager.BookRepository.Update(entity); yazılmali
@@ -69,14 +69,20 @@ namespace Presentation.Controllers
 		}
 
 		[HttpPatch("{id:int}")]
-		public IActionResult PartiallyUpdateOneBook([FromRoute(Name = "id")] int id, [FromBody] JsonPatchDocument<BookDto> bookPatch)
+		public IActionResult PartiallyUpdateOneBook([FromRoute(Name = "id")] int id, [FromBody] JsonPatchDocument<BookDtoForUpdate> bookPatch)
 		{
-			// check entity
-			var bookDto = _manager.BookService.GetOneBookById(id, true);
+			if (bookPatch is null)
+				return BadRequest();
 
-			bookPatch.ApplyTo(bookDto);
-			_manager.BookService.UpdateOneBook(id, new BookDtoForUpdate(bookDto.Id, bookDto.Title, bookDto.Price), true);
+			var result = _manager.BookService.GetOneBookForPatch(id, true);
+			bookPatch.ApplyTo(result.bookDtoForUpdate, ModelState);
 
+			TryValidateModel(result.bookDtoForUpdate);
+
+			if (!ModelState.IsValid)
+				return UnprocessableEntity(ModelState);
+
+			_manager.BookService.SaveChangesForPatch(result.bookDtoForUpdate,result.book);
 			return NoContent(); // 204
 		}
 
