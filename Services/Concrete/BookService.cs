@@ -23,11 +23,12 @@ namespace Services.Concrete
 			_logger = logger;
 			_mapper = mapper;
 		}
-		public Book CreateOneBook(Book book)
+		public BookDto CreateOneBook(BookDtoForInsertion bookDto)
 		{
-			_manager.BookRepository.CreateOneBook(book);
-			_manager.Save();
-			return book;
+			var model = _mapper.Map<Book>(bookDto);
+			_manager.BookRepository.CreateOneBook(model);
+			_manager.Save(); 
+			return _mapper.Map<BookDto>(model); //geriye BookDto donmemiz lazim ama model Book tipinde, o yuzden tekrar mapping..
 		}
 		public void DeleteOneBook(int id, bool trackChanges)
 		{
@@ -43,12 +44,12 @@ namespace Services.Concrete
 			var books = _manager.BookRepository.GetAllBooks(trackChanges);
 			return _mapper.Map<IEnumerable<BookDto>>(books);
 		}
-		public Book? GetOneBookById(int id, bool trackChanges)
+		public BookDto GetOneBookById(int id, bool trackChanges)
 		{
 			var book = _manager.BookRepository.GetOneBookById(id, trackChanges);
 			if (book is null)
-				throw new BookNotFoundException(id);    //return NotFound(); 404
-			return book;
+				throw new BookNotFoundException(id);    //return NotFound(); 404  
+			return _mapper.Map<BookDto>(book); //veritabanından(book) BookDto turunde bir verinin donmesi saglandi
 		}
 		public void UpdateOneBook(int id, BookDtoForUpdate bookDto, bool trackChanges)
 		{

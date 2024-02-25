@@ -10,7 +10,13 @@ namespace Entities.DTOs
 	public record BookDtoForUpdate : BookDtoForManipulation
 	{
 		[Required]
-        public int Id { get; set; }
+        public int Id { get; init; }
+        public BookDtoForUpdate(int id, string title, decimal price)
+        {
+			Id = id;
+			Title = title;
+			Price = price;
+		}
     }
 	//public record BookDtoForUpdate(int Id, string Title, decimal Price);
 	//public record BookDtoForUpdate (bu 2 kullanim ayni, ikiside init;)

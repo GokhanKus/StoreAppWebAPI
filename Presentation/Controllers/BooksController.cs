@@ -39,14 +39,14 @@ namespace Presentation.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult CreateOneBook([FromBody] Book book)
+		public IActionResult CreateOneBook([FromBody] BookDtoForInsertion bookDto)
 		{
-			if (book is null)
+			if (bookDto is null)
 				return BadRequest(); // 400 
 
-			_manager.BookService.CreateOneBook(book);
+			_manager.BookService.CreateOneBook(bookDto);
 
-			return StatusCode(201, book);
+			return StatusCode(201, bookDto);
 		}
 
 		[HttpPut("{id:int}")]
@@ -66,13 +66,13 @@ namespace Presentation.Controllers
 			return NoContent();
 		}
 		[HttpPatch("{id:int}")]
-		public IActionResult PartiallyUpdateOneBook([FromRoute(Name = "id")] int id, [FromBody] JsonPatchDocument<Book> bookPatch)
+		public IActionResult PartiallyUpdateOneBook([FromRoute(Name = "id")] int id, [FromBody] JsonPatchDocument<BookDto> bookPatch)
 		{
 			// check entity
-			var entity = _manager.BookService.GetOneBookById(id, true);
+			var bookDto = _manager.BookService.GetOneBookById(id, true);
 
-			bookPatch.ApplyTo(entity);
-			_manager.BookService.UpdateOneBook(id, new BookDtoForUpdate(entity.Id, entity.Title, entity.Price), true); //bu satir gereksiz olmasa da oluyor
+			bookPatch.ApplyTo(bookDto);
+			_manager.BookService.UpdateOneBook(id, new BookDtoForUpdate(bookDto.Id, bookDto.Title, bookDto.Price), true);
 
 			return NoContent(); // 204
 		}
