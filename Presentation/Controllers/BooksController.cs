@@ -23,12 +23,14 @@ namespace Presentation.Controllers
 		{
 			_manager = manager;
 		}
+
 		[HttpGet]
 		public IActionResult GetAllBooks()
 		{
 			var books = _manager.BookService.GetAllBooks(false);
 			return Ok(books);
 		}
+
 		[HttpGet("{id:int}")]
 		public IActionResult GetOneBook([FromRoute(Name = "id")] int id)
 		{
@@ -59,16 +61,13 @@ namespace Presentation.Controllers
 			if (bookDto is null)
 				return BadRequest();
 
+			if (!ModelState.IsValid) 
+				return UnprocessableEntity(ModelState);
+
 			_manager.BookService.UpdateOneBook(id, bookDto, true);//degisiklikler izlenmeyecekse (false) service.cs'te _manager.BookRepository.Update(entity); yazılmali
 			return Ok(bookDto);
 		}
 
-		[HttpDelete("{id:int}")]
-		public IActionResult DeleteOneBook([FromRoute(Name = "id")] int id)
-		{
-			_manager.BookService.DeleteOneBook(id, false);
-			return NoContent();
-		}
 		[HttpPatch("{id:int}")]
 		public IActionResult PartiallyUpdateOneBook([FromRoute(Name = "id")] int id, [FromBody] JsonPatchDocument<BookDto> bookPatch)
 		{
@@ -79,6 +78,13 @@ namespace Presentation.Controllers
 			_manager.BookService.UpdateOneBook(id, new BookDtoForUpdate(bookDto.Id, bookDto.Title, bookDto.Price), true);
 
 			return NoContent(); // 204
+		}
+
+		[HttpDelete("{id:int}")]
+		public IActionResult DeleteOneBook([FromRoute(Name = "id")] int id)
+		{
+			_manager.BookService.DeleteOneBook(id, false);
+			return NoContent();
 		}
 	}
 }

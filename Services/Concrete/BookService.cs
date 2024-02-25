@@ -60,7 +60,10 @@ namespace Services.Concrete
 			_mapper.Map(bookDto, entity);
 
 			//entity = _mapper.Map<Book>(bookDto);
-			//_manager.BookRepository.Update(entity); //bu satir olacaksa trackchanges false olmali, izlenen nesne degisiklerden sonra Update() olmadan da dogrudan save edilebilir
+
+			//_manager.BookRepository.Update(entity); 
+			//bu satir olacaksa trackchanges false olmali, izlenen nesne degisiklerden sonra Update() olmadan da dogrudan save edilebilir
+			//ya da update() kullanilacaksa degisiklikleri izlemeye gerek yok(trackChanges = false), kullanilmayacaksa degisiklikler izlenmeli
 			
 			//entity.Title = bookDto.Title;
 			//entity.Price = bookDto.Price;
