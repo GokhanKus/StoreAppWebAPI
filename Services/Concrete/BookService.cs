@@ -23,53 +23,53 @@ namespace Services.Concrete
 			_logger = logger;
 			_mapper = mapper;
 		}
-		public BookDto CreateOneBook(BookDtoForInsertion bookDto)
+		public async Task<BookDto> CreateOneBookAsync(BookDtoForInsertion bookDto)
 		{
 			var model = _mapper.Map<Book>(bookDto);
 			_manager.BookRepository.CreateOneBook(model);
-			_manager.Save(); 
+			await _manager.SaveAsync();
 			return _mapper.Map<BookDto>(model); //geriye BookDto donmemiz lazim ama model Book tipinde, o yuzden tekrar mapping..
 		}
-		public void DeleteOneBook(int id, bool trackChanges)
+		public async Task DeleteOneBookAsync(int id, bool trackChanges)
 		{
-			var book = _manager.BookRepository.GetOneBookById(id, trackChanges);
+			var book = await _manager.BookRepository.GetOneBookByIdAsync(id, trackChanges);
 			if (book is null)
 				throw new BookNotFoundException(id); //refactoring saglamis olduk; refactoring, kodun daha kısa ve anlasilir olmasina denir
 
 			_manager.BookRepository.DeleteOneBook(book);
-			_manager.Save();
+			await _manager.SaveAsync();
 		}
-		public IEnumerable<BookDto> GetAllBooks(bool trackChanges)
+		public async Task<IEnumerable<BookDto>> GetAllBooksAsync(bool trackChanges)
 		{
-			var books = _manager.BookRepository.GetAllBooks(trackChanges);
+			var books = await _manager.BookRepository.GetAllBooksAsync(trackChanges);
 			return _mapper.Map<IEnumerable<BookDto>>(books);
 		}
-		public BookDto GetOneBookById(int id, bool trackChanges)
+		public async Task<BookDto> GetOneBookByIdAsync(int id, bool trackChanges)
 		{
-			var book = _manager.BookRepository.GetOneBookById(id, trackChanges);
+			var book = await _manager.BookRepository.GetOneBookByIdAsync(id, trackChanges);
 			if (book is null)
 				throw new BookNotFoundException(id);    //return NotFound(); 404  
 			return _mapper.Map<BookDto>(book); //veritabanından(book) BookDto turunde bir verinin donmesi saglandi
 		}
-
-		public (BookDtoForUpdate bookDtoForUpdate, Book book) GetOneBookForPatch(int id, bool trackChanges)
+		
+		public async Task<(BookDtoForUpdate bookDtoForUpdate, Book book)> GetOneBookForPatchAsync(int id, bool trackChanges)
 		{
-			var book = _manager.BookRepository.GetOneBookById(id, trackChanges);
-			if (book is null) 
+			var book = await _manager.BookRepository.GetOneBookByIdAsync(id, trackChanges);
+			if (book is null)  
 				throw new BookNotFoundException(id);
 			var bookDtoForUpdate = _mapper.Map<BookDtoForUpdate>(book);
 			return (bookDtoForUpdate, book);
 		}
 
-		public void SaveChangesForPatch(BookDtoForUpdate bookDtoForUpdate, Book book)
+		public async Task SaveChangesForPatchAsync(BookDtoForUpdate bookDtoForUpdate, Book book)
 		{
 			_mapper.Map(bookDtoForUpdate, book);
-			_manager.Save();
+			await _manager.SaveAsync();
 		}
 
-		public void UpdateOneBook(int id, BookDtoForUpdate bookDto, bool trackChanges)
+		public async Task UpdateOneBookAsync(int id, BookDtoForUpdate bookDto, bool trackChanges)
 		{
-			var entity = _manager.BookRepository.GetOneBookById(id, trackChanges);
+			var entity = await _manager.BookRepository.GetOneBookByIdAsync(id, trackChanges);
 			if (entity is null)
 				throw new BookNotFoundException(id);
 
@@ -80,10 +80,10 @@ namespace Services.Concrete
 			//_manager.BookRepository.Update(entity); 
 			//bu satir olacaksa trackchanges false olmali, izlenen nesne degisiklerden sonra Update() olmadan da dogrudan save edilebilir
 			//ya da update() kullanilacaksa degisiklikleri izlemeye gerek yok(trackChanges = false), kullanilmayacaksa degisiklikler izlenmeli
-			
+
 			//entity.Title = bookDto.Title;
 			//entity.Price = bookDto.Price;
-			_manager.Save();
+			await _manager.SaveAsync();
 		}
 	}
 }

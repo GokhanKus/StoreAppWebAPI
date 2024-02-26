@@ -10,13 +10,17 @@ namespace Services.Contracts
 {
 	public interface IBookService
 	{
-		IEnumerable<BookDto> GetAllBooks(bool trackChanges);
-		BookDto GetOneBookById(int id, bool trackChanges);
-		BookDto CreateOneBook(BookDtoForInsertion book);
-		void DeleteOneBook(int id, bool trackChanges);
-		void UpdateOneBook(int id, BookDtoForUpdate bookDto, bool trackChanges);
-		(BookDtoForUpdate bookDtoForUpdate, Book book) GetOneBookForPatch(int id, bool trackChanges); //tuple, geriye donus yapacagim tipler:BookDtoForUpdate ve Book
+		Task<IEnumerable<BookDto>> GetAllBooksAsync(bool trackChanges);
+		Task<BookDto> GetOneBookByIdAsync(int id, bool trackChanges);
+		Task<BookDto> CreateOneBookAsync(BookDtoForInsertion book);
+		Task DeleteOneBookAsync(int id, bool trackChanges);
+		Task UpdateOneBookAsync(int id, BookDtoForUpdate bookDto, bool trackChanges);
+		Task<(BookDtoForUpdate bookDtoForUpdate, Book book)> GetOneBookForPatchAsync(int id, bool trackChanges); //tuple, geriye donus yapacagim tipler:BookDtoForUpdate ve Book
 		//Tuple<(BookDtoForUpdate bookDtoForUpdate, Book book)> GetOneBookForPatch(int id, bool trackChanges); ustekiyle ayni yazim
-		void SaveChangesForPatch(BookDtoForUpdate bookDtoForUpdate, Book book);
+		Task SaveChangesForPatchAsync(BookDtoForUpdate bookDtoForUpdate, Book book);
 	}
 }
+/*
+repo interfacesinde create delete update'leri Task async yapmadik cunku orada saveasync yoktu orada tracking oldugu icin degisiklikler izleniyordu 
+service katmanında saveasync calistigi icin burada create update delete metotlarını da task ile sarmalliyoruz
+ */
