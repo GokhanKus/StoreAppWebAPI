@@ -38,9 +38,9 @@ namespace Repositories.RepoConcrete
 			/*new Lazy<IBookRepository>(() => new BookRepository(_context));*/
 		}
 		public IBookRepository BookRepository => _bookRepository;
-		public void Save()
+		public async Task SaveAsync()
 		{
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 		}
 	}
 }
