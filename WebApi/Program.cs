@@ -20,6 +20,8 @@ namespace WebApi
 			builder.Services.ServiceInjections();
 			builder.Services.LoggerService();
 
+			builder.Services.ValidationFilterInjections();
+
 			builder.Services.AddAutoMapper(typeof(Program));//WebApi
 
 			builder.Services.AddControllers(config =>

@@ -6,6 +6,7 @@ using Repositories.RepoContracts;
 using Services.Concrete;
 using Services.Contracts;
 using System.Runtime.CompilerServices;
+using Presentation.ActionFilters;
 
 namespace WebApi.ExtensionMethods
 {
@@ -31,6 +32,10 @@ namespace WebApi.ExtensionMethods
 		public static void LoggerService(this IServiceCollection services)
 		{
 			services.AddSingleton<ILoggerService, LoggerService>();
+		}
+		public static void ValidationFilterInjections(this IServiceCollection services)
+		{
+			services.AddScoped<ValidationFilterAttribute>();
 		}
 	}
 }

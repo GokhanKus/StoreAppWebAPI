@@ -10,7 +10,7 @@ namespace Presentation.ActionFilters
 {
 	//bu class sayesinde artik controllerlarda null kontrolu veya modelstate.Isvalid kontrolu yapmayacagiz cunku artık burada yapiyoruz
 	//artik tek yapmamız gereken sey controllerdaki action metotlarının uzerine [ValidationFilter] yazmak
-	internal class ValidationFilterAttribute : ActionFilterAttribute
+	public class ValidationFilterAttribute : ActionFilterAttribute
 	{
 		public override void OnActionExecuting(ActionExecutingContext context) //controllerdaki action metodu calismadan hemen once calisacak olan metot burasi
 		{
@@ -18,15 +18,14 @@ namespace Presentation.ActionFilters
 			var action = context.RouteData.Values["action"];        //urldeki action ismini verir
 
 			var parameter = context.ActionArguments.SingleOrDefault(p => p.Value.ToString().Contains("Dto")).Value; //actionda dto keywordu gecen bir parametre varsa onu alır
-			if (parameter is null)	//eger dto yoksa
+			if (parameter is null)  //eger dto yoksa
 			{
 				context.Result = new BadRequestObjectResult($"object is null in Controller: {controller} Action: {action}");
 				return; //400
 			}
 			if (!context.ModelState.IsValid)
 			{
-				context.Result = new UnprocessableEntityObjectResult(context.ModelState); 
-				return;
+				context.Result = new UnprocessableEntityObjectResult(context.ModelState); //422 
 			}
 		}
 	}

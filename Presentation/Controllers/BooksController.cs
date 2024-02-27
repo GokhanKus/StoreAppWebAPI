@@ -4,6 +4,7 @@ using Entities.Models;
 using Microsoft.AspNetCore.JsonPatch; //for [HttpPatch]
 using Microsoft.AspNetCore.Mvc; //bir sınıfa controller olma ozelligini kazandırır
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Presentation.ActionFilters;
 using Services.Contracts;
 using System;
 using System.Collections.Generic;
@@ -40,30 +41,34 @@ namespace Presentation.Controllers
 
 			return Ok(book);
 		}
-
+		[ServiceFilter(typeof(ValidationFilterAttribute))]
 		[HttpPost]
 		public async Task<IActionResult> CreateOneBookAsync([FromBody] BookDtoForInsertion bookDto)
 		{
-			if (bookDto is null)
-				return BadRequest(); // 400 
+			#region ValidationFilterAttribute sayesinde null veya modelstate.IsValid check yapmamiza gerek kalmadi
 
-			if (!ModelState.IsValid) //model gecerli degilse 422 ile donelim
-				return UnprocessableEntity(ModelState); //program.cs'te SuppressModelStateInvalidFilter = true bu kısmı yazdiktan sonra bu if kontrolunu yapmazsak invalid olsa bile ekler
+			//if (bookDto is null)
+			//	return BadRequest(); // 400 
 
+			//if (!ModelState.IsValid) //model gecerli degilse 422 ile donelim
+			//	return UnprocessableEntity(ModelState); //program.cs'te SuppressModelStateInvalidFilter = true bu kısmı yazdiktan sonra bu if kontrolunu yapmazsak invalid olsa bile ekler
+			#endregion
 			var book = await _manager.BookService.CreateOneBookAsync(bookDto);
-
 			return StatusCode(201, book);
 		}
 
+		[ServiceFilter(typeof(ValidationFilterAttribute))]
 		[HttpPut("{id:int}")]
 		public async Task<IActionResult> UpdateOneBookAsync([FromRoute(Name = "id")] int id, [FromBody] BookDtoForUpdate bookDto)
 		{
-			if (bookDto is null)
-				return BadRequest();
+			#region ValidationFilterAttribute sayesinde null veya modelstate.IsValid check yapmamiza gerek kalmadi
 
-			if (!ModelState.IsValid)
-				return UnprocessableEntity(ModelState);
+			//if (bookDto is null)
+			//	return BadRequest();
 
+			//if (!ModelState.IsValid)
+			//	return UnprocessableEntity(ModelState);
+			#endregion
 			await _manager.BookService.UpdateOneBookAsync(id, bookDto, true);//degisiklikler izlenmeyecekse (false) service.cs'te _manager.BookRepository.Update(entity); yazılmali
 			return Ok(bookDto);
 		}
