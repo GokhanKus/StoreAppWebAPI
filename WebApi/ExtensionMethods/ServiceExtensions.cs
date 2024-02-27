@@ -29,13 +29,14 @@ namespace WebApi.ExtensionMethods
 			services.AddScoped<IServiceManager, ServiceManager>();
 			services.AddScoped<IBookService, BookService>();
 		}
-		public static void LoggerService(this IServiceCollection services)
+		public static void LoggerServiceInjections(this IServiceCollection services)
 		{
 			services.AddSingleton<ILoggerService, LoggerService>();
 		}
-		public static void ValidationFilterInjections(this IServiceCollection services)
+		public static void ActionFilterInjections(this IServiceCollection services)
 		{
 			services.AddScoped<ValidationFilterAttribute>();
+			services.AddSingleton<LogFilterAttribute>(); //loglama islemi icin sadece bir tane nesnenin olusmasi yeterli o yuzden singleton
 		}
 	}
 }

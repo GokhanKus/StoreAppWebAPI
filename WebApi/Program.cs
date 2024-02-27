@@ -18,9 +18,9 @@ namespace WebApi
 			builder.Services.SqlConfiguration(builder.Configuration);
 			builder.Services.RepositoryInjections();
 			builder.Services.ServiceInjections();
-			builder.Services.LoggerService();
+			builder.Services.LoggerServiceInjections();
 
-			builder.Services.ValidationFilterInjections();
+			builder.Services.ActionFilterInjections();
 
 			builder.Services.AddAutoMapper(typeof(Program));//WebApi
 

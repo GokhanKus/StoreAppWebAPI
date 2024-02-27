@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace Presentation.Controllers
 {
+	[ServiceFilter(typeof(LogFilterAttribute))] //calistirdigimiz butun actionlar loga dusecek => StoreAppWebAPI\WebApi\bin\Debug\net8.0\logs\2024-02-27_logfile.txt
 	[ApiController]
 	[Route("api/books")]
 	public class BooksController : ControllerBase
