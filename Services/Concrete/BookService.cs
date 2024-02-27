@@ -32,9 +32,7 @@ namespace Services.Concrete
 		}
 		public async Task DeleteOneBookAsync(int id, bool trackChanges)
 		{
-			var book = await _manager.BookRepository.GetOneBookByIdAsync(id, trackChanges);
-			if (book is null)
-				throw new BookNotFoundException(id); //refactoring saglamis olduk; refactoring, kodun daha kısa ve anlasilir olmasina denir
+			var book = await GetOneBookByIdAndCheckExists(id, trackChanges);
 
 			_manager.BookRepository.DeleteOneBook(book);
 			await _manager.SaveAsync();
@@ -46,17 +44,15 @@ namespace Services.Concrete
 		}
 		public async Task<BookDto> GetOneBookByIdAsync(int id, bool trackChanges)
 		{
-			var book = await _manager.BookRepository.GetOneBookByIdAsync(id, trackChanges);
-			if (book is null)
-				throw new BookNotFoundException(id);    //return NotFound(); 404  
+			var book = await GetOneBookByIdAndCheckExists(id, trackChanges);
+
 			return _mapper.Map<BookDto>(book); //veritabanından(book) BookDto turunde bir verinin donmesi saglandi
 		}
-		
+
 		public async Task<(BookDtoForUpdate bookDtoForUpdate, Book book)> GetOneBookForPatchAsync(int id, bool trackChanges)
 		{
-			var book = await _manager.BookRepository.GetOneBookByIdAsync(id, trackChanges);
-			if (book is null)  
-				throw new BookNotFoundException(id);
+			var book = await GetOneBookByIdAndCheckExists(id, trackChanges);
+
 			var bookDtoForUpdate = _mapper.Map<BookDtoForUpdate>(book);
 			return (bookDtoForUpdate, book);
 		}
@@ -69,11 +65,9 @@ namespace Services.Concrete
 
 		public async Task UpdateOneBookAsync(int id, BookDtoForUpdate bookDto, bool trackChanges)
 		{
-			var entity = await _manager.BookRepository.GetOneBookByIdAsync(id, trackChanges);
-			if (entity is null)
-				throw new BookNotFoundException(id);
+			var book = await GetOneBookByIdAndCheckExists(id, trackChanges);
 
-			_mapper.Map(bookDto, entity);
+			_mapper.Map(bookDto, book);
 
 			//entity = _mapper.Map<Book>(bookDto);
 
@@ -84,6 +78,13 @@ namespace Services.Concrete
 			//entity.Title = bookDto.Title;
 			//entity.Price = bookDto.Price;
 			await _manager.SaveAsync();
+		}
+		private async Task<Book> GetOneBookByIdAndCheckExists(int id, bool trackChanges)
+		{
+			var book = await _manager.BookRepository.GetOneBookByIdAsync(id, trackChanges);
+			if (book is null)
+				throw new BookNotFoundException(id);
+			return book;
 		}
 	}
 }
