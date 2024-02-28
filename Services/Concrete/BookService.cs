@@ -2,6 +2,7 @@
 using Entities.DTOs;
 using Entities.Exceptions;
 using Entities.Models;
+using Entities.RequestFeatures;
 using Repositories.RepoContracts;
 using Services.Contracts;
 using System;
@@ -37,9 +38,9 @@ namespace Services.Concrete
 			_manager.BookRepository.DeleteOneBook(book);
 			await _manager.SaveAsync();
 		}
-		public async Task<IEnumerable<BookDto>> GetAllBooksAsync(bool trackChanges)
+		public async Task<IEnumerable<BookDto>> GetAllBooksAsync(BookParameters bookParameters, bool trackChanges)
 		{
-			var books = await _manager.BookRepository.GetAllBooksAsync(trackChanges);
+			var books = await _manager.BookRepository.GetAllBooksAsync(bookParameters, trackChanges);
 			return _mapper.Map<IEnumerable<BookDto>>(books);
 		}
 		public async Task<BookDto> GetOneBookByIdAsync(int id, bool trackChanges)
