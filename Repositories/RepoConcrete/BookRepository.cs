@@ -1,6 +1,8 @@
 ﻿using Entities.Models;
+using Entities.RequestFeatures;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Context;
+using Repositories.Extensions;
 using Repositories.RepoContracts;
 using System;
 using System.Collections.Generic;
@@ -19,9 +21,12 @@ namespace Repositories.RepoConcrete
 		public void CreateOneBook(Book book) => Create(book);
 		public void UpdateOneBook(Book book) => Update(book);
 		public void DeleteOneBook(Book book) => Delete(book);
-		public async Task<IEnumerable<Book>> GetAllBooksAsync(bool trackChanges)
+		public async Task<IEnumerable<Book>> GetAllBooksAsync(BookParameters bookParameters, bool trackChanges)
 		{
-			return await FindAll(trackChanges).OrderBy(i => i.Id).ToListAsync();
+			return await FindAll(trackChanges)
+				.OrderBy(i => i.Id)
+				.Paginate(bookParameters.PageNumber, bookParameters.PageSize)
+				.ToListAsync();
 		}
 		public async Task<Book> GetOneBookByIdAsync(int id, bool trackChanges)
 		{
