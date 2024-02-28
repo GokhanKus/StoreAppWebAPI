@@ -1,6 +1,7 @@
 ﻿using Entities.DTOs;
 using Entities.Exceptions;
 using Entities.Models;
+using Entities.RequestFeatures;
 using Microsoft.AspNetCore.JsonPatch; //for [HttpPatch]
 using Microsoft.AspNetCore.Mvc; //bir sınıfa controller olma ozelligini kazandırır
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -27,9 +28,10 @@ namespace Presentation.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> GetAllBooksAsync()
+		public async Task<IActionResult> GetAllBooksAsync([FromQuery] BookParameters bookParameters) //books?pageNumber=2&pageSize=10
 		{
-			var books = await _manager.BookService.GetAllBooksAsync(false);
+			//FromQuery diyerek bu ifadenin query string oldugunu queryden gelecegini belirtelim
+			var books = await _manager.BookService.GetAllBooksAsync(bookParameters, false);
 			return Ok(books);
 		}
 
