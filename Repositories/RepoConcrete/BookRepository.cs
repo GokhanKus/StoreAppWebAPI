@@ -12,7 +12,8 @@ using System.Threading.Tasks;
 
 namespace Repositories.RepoConcrete
 {
-	public class BookRepository : RepositoryBase<Book>, IBookRepository
+	//sealed: bu classin bir daha devralinamayacagini belirtiri bu classin son versiyonudur inherit edilmesi artik mumkun degildir.
+	public sealed class BookRepository : RepositoryBase<Book>, IBookRepository
 	{
 		public BookRepository(RepositoryContext context) : base(context)
 		{
@@ -23,9 +24,8 @@ namespace Repositories.RepoConcrete
 		public void DeleteOneBook(Book book) => Delete(book);
 		public async Task<PagedList<Book>> GetAllBooksAsync(BookParameters bookParameters, bool trackChanges)
 		{
-			var books = await FindByCondition(b =>
-			((b.Price >= bookParameters.MinPrice) &&
-			(b.Price <= bookParameters.MaxPrice)), trackChanges)
+			var books = await FindAll(trackChanges)
+				.FilterBooksWithPrice(bookParameters.MinPrice,bookParameters.MaxPrice)
 				.OrderBy(i => i.Id)
 				.ToListAsync();
 
