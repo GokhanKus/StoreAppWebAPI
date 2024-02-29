@@ -38,7 +38,7 @@ namespace Repositories.RepoConcrete
 				_context.Set<TEntity>() :               //bir liste geldi ve ef core listeyi izleyecek
 				_context.Set<TEntity>().AsNoTracking(); //degisiklikleri izlemeye gerek yok
 		}
-		public IQueryable<TEntity>? FindByCondition(Expression<Func<TEntity, bool>> expression, bool trackChanges)
+		public IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression, bool trackChanges)
 		{
 			return trackChanges ?
 				_context.Set<TEntity>().Where(expression) :

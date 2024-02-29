@@ -23,7 +23,9 @@ namespace Repositories.RepoConcrete
 		public void DeleteOneBook(Book book) => Delete(book);
 		public async Task<PagedList<Book>> GetAllBooksAsync(BookParameters bookParameters, bool trackChanges)
 		{
-			var books = await FindAll(trackChanges)
+			var books = await FindByCondition(b =>
+			((b.Price >= bookParameters.MinPrice) &&
+			(b.Price <= bookParameters.MaxPrice)), trackChanges)
 				.OrderBy(i => i.Id)
 				.ToListAsync();
 
