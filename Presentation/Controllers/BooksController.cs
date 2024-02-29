@@ -41,10 +41,14 @@ namespace Presentation.Controllers
 			Bu kod parçası, bir HTTP yanıtının başlık bölümüne "X-Pagination" adında özel bir başlık ekler.Bu başlık, sayfalama işlemiyle ilgili ek bilgileri taşır.
 			Örneğin, bir web uygulaması üzerinden birçok sonuç getiriyorsanız ve bunları sayfalara ayırıyorsanız,
 			her bir sayfa için kaç tane öğe olduğunu, toplam öğe sayısını, mevcut sayfa numarasını ve benzeri bilgileri bu "X-Pagination" başlığı içinde gönderebilirsiniz.
-			Yani, Response.Headers["X-Pagination"] ifadesi, HTTP yanıtının başlık bölümünde bir başlık eklerken, bu başlık içine yerleştirilecek veri, sayfalama işlemiyle ilgili bilgileri içerir.Bu bilgiler JSON formatına dönüştürülerek başlığa eklenir, böylece istemciye(tarayıcıya veya diğer istemcilere) sunulan verilerin nasıl sayfalara ayrıldığını anlamaları için ek bilgi sağlanmış olur.
+			Yani, Response.Headers["X-Pagination"] ifadesi, HTTP yanıtının başlık bölümünde bir başlık eklerken, 
+			bu başlık içine yerleştirilecek veri, sayfalama işlemiyle ilgili bilgileri içerir.Bu bilgiler JSON formatına dönüştürülerek başlığa eklenir,
+			böylece istemciye(tarayıcıya veya diğer istemcilere) sunulan verilerin nasıl sayfalara ayrıldığını anlamaları için ek bilgi sağlanmış olur.
+			Response Header'da, örnegin boyle bir sorgu atarsak: "/api/Books?pageSize=20&pageNumber=2", asagidaki gibi cikti aliriz;
+			X-Pagination = {"CurrentPage":2,"TotalPage":5,"PageSize":20,"TotalCount":91,"HasPreviousPage":true,"HasNextPage":true}
 			*/
 			#endregion
-			
+
 			return Ok(pagedResult.books);
 		}
 

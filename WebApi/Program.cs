@@ -21,6 +21,7 @@ namespace WebApi
 			builder.Services.LoggerServiceInjections();
 
 			builder.Services.ActionFilterInjections();
+			builder.Services.ConfigureCors();
 
 			builder.Services.AddAutoMapper(typeof(Program));//WebApi
 
@@ -29,7 +30,7 @@ namespace WebApi
 				config.RespectBrowserAcceptHeader = true; //artik apimizin icerik pazarligina acik oldugunu ve
 				config.ReturnHttpNotAcceptable = true;    //kabul edilmeyen format oldugunda 406 koduyla geri donecegiz
 			})
-			.AddCustomCsvFormatter()					//kendi yazmis oldugumuz custom csvformatter
+			.AddCustomCsvFormatter()                    //kendi yazmis oldugumuz custom csvformatter
 			.AddXmlDataContractSerializerFormatters() //xml dosya formatini kabul edecegimizi ve bu formatta output verilebilecegini belirtiyoruz
 			.AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly)
 			.AddNewtonsoftJson();
@@ -57,6 +58,8 @@ namespace WebApi
 			{
 				app.UseHsts();
 			}
+
+			app.UseCors("CorsPolicy");
 
 			app.UseAuthorization();
 

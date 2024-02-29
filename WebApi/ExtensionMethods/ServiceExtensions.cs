@@ -38,5 +38,27 @@ namespace WebApi.ExtensionMethods
 			services.AddScoped<ValidationFilterAttribute>();
 			services.AddSingleton<LogFilterAttribute>(); //loglama islemi icin sadece bir tane nesnenin olusmasi yeterli o yuzden singleton
 		}
+		public static void ConfigureCors(this IServiceCollection services)
+		{
+			#region Cors
+			/*
+			X-Pagination adında bir response.header ifademiz var ve bu ifadenin clientlar tarafından tuketilebilmesi/okunabilmesi icin bir izin tanimlamasi yapmamiz gerek
+			bunu da Cors (Cross origin resource sharing) adı verilen yapi icerisinde yapariz
+			ornegin front-end uygulama gelistiren birisi bizim api'mize baglanmak istesin
+			ve biz bir policy ekleyerek o kisiye bu kaynaga erisme izni vermeliyiz ki api'mize istek atabilsin
+			*/
+			#endregion
+			services.AddCors(options =>
+			{
+				options.AddPolicy("CorsPolicy", builder =>
+				{
+					builder
+					.AllowAnyOrigin()
+					.AllowAnyMethod()
+					.AllowAnyHeader()
+					.WithExposedHeaders("X-Pagination");
+				});
+			});
+		}
 	}
 }
