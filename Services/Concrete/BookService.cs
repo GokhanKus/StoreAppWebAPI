@@ -38,7 +38,7 @@ namespace Services.Concrete
 			_manager.BookRepository.DeleteOneBook(book);
 			await _manager.SaveAsync();
 		}
-		public async Task<(IEnumerable<BookDto>, MetaData metaData)> GetAllBooksAsync(BookParameters bookParameters, bool trackChanges)
+		public async Task<(IEnumerable<BookDto> books, MetaData metaData)> GetAllBooksAsync(BookParameters bookParameters, bool trackChanges)
 		{
 			var booksWithMetaData = await _manager.BookRepository.GetAllBooksAsync(bookParameters, trackChanges);
 			var booksDto = _mapper.Map<IEnumerable<BookDto>>(booksWithMetaData);

@@ -9,9 +9,12 @@ using Presentation.ActionFilters;
 using Services.Contracts;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Presentation.Controllers
@@ -31,8 +34,18 @@ namespace Presentation.Controllers
 		public async Task<IActionResult> GetAllBooksAsync([FromQuery] BookParameters bookParameters) //books?pageNumber=2&pageSize=10
 		{
 			//FromQuery diyerek bu ifadenin query string oldugunu queryden gelecegini belirtelim
-			var books = await _manager.BookService.GetAllBooksAsync(bookParameters, false);
-			return Ok(books);
+			var pagedResult = await _manager.BookService.GetAllBooksAsync(bookParameters, false);
+			Response.Headers["X-Pagination"] = JsonSerializer.Serialize(pagedResult.metaData);
+			#region Response.Headers["X-Pagination"]
+			/*
+			Bu kod parçası, bir HTTP yanıtının başlık bölümüne "X-Pagination" adında özel bir başlık ekler.Bu başlık, sayfalama işlemiyle ilgili ek bilgileri taşır.
+			Örneğin, bir web uygulaması üzerinden birçok sonuç getiriyorsanız ve bunları sayfalara ayırıyorsanız,
+			her bir sayfa için kaç tane öğe olduğunu, toplam öğe sayısını, mevcut sayfa numarasını ve benzeri bilgileri bu "X-Pagination" başlığı içinde gönderebilirsiniz.
+			Yani, Response.Headers["X-Pagination"] ifadesi, HTTP yanıtının başlık bölümünde bir başlık eklerken, bu başlık içine yerleştirilecek veri, sayfalama işlemiyle ilgili bilgileri içerir.Bu bilgiler JSON formatına dönüştürülerek başlığa eklenir, böylece istemciye(tarayıcıya veya diğer istemcilere) sunulan verilerin nasıl sayfalara ayrıldığını anlamaları için ek bilgi sağlanmış olur.
+			*/
+			#endregion
+			
+			return Ok(pagedResult.books);
 		}
 
 		[HttpGet("{id:int}")]
