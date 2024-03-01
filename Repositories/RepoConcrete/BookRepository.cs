@@ -25,6 +25,7 @@ namespace Repositories.RepoConcrete
 		public async Task<PagedList<Book>> GetAllBooksAsync(BookParameters bookParameters, bool trackChanges)
 		{
 			var books = await FindAll(trackChanges)
+				.FilterBooksWithName(bookParameters.SearchingTerm)
 				.FilterBooksWithPrice(bookParameters.MinPrice,bookParameters.MaxPrice)
 				.OrderBy(i => i.Id)
 				.ToListAsync();

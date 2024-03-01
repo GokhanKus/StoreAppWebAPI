@@ -16,12 +16,12 @@ namespace Services.Concrete
 	public class BookService : IBookService
 	{
 		private readonly IRepositoryManager _manager;
-		private readonly ILoggerService _logger;
+		//private readonly ILoggerService _logger;
 		private readonly IMapper _mapper;
-		public BookService(IRepositoryManager manager, ILoggerService logger, IMapper mapper)
+		public BookService(IRepositoryManager manager, /*ILoggerService logger,*/ IMapper mapper)
 		{
 			_manager = manager;
-			_logger = logger;
+			//_logger = logger;
 			_mapper = mapper;
 		}
 		public async Task<BookDto> CreateOneBookAsync(BookDtoForInsertion bookDto)

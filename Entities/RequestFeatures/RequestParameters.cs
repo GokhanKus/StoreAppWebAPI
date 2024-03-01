@@ -13,7 +13,7 @@ namespace Entities.RequestFeatures
 
 		//auto-implemented property
 		public int PageNumber { get; set; }
-
+		public string? SearchingTerm { get; set; }
 		//full-property
 		private int _pageSize;
 		public int PageSize
