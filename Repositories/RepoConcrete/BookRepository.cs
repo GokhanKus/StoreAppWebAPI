@@ -27,6 +27,7 @@ namespace Repositories.RepoConcrete
 			var books = await FindAll(trackChanges)
 				.FilterBooksWithName(bookParameters.SearchingTerm)
 				.FilterBooksWithPrice(bookParameters.MinPrice,bookParameters.MaxPrice)
+				.Sort(bookParameters.OrderBy)
 				.OrderBy(i => i.Id)
 				.ToListAsync();
 
