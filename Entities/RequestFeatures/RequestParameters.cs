@@ -15,8 +15,9 @@ namespace Entities.RequestFeatures
 		public int PageNumber { get; set; }
 		public string? SearchingTerm { get; set; }
 		public string? OrderBy { get; set; }
-		//full-property
-		private int _pageSize;
+        public string? Fields { get; set; }
+        //full-property
+        private int _pageSize;
 		public int PageSize
 		{
 			get { return _pageSize; }

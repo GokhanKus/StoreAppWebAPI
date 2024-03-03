@@ -39,7 +39,8 @@ namespace Repositories.Extensions
 			if (orderQuery is null)
 				return books.OrderBy(b => b.Id);
 
-			return books.OrderBy(orderQuery); //title ascending, price descending, id ascending'ye gore sirala
+			return books.OrderBy(orderQuery); //title ascending, price descending, id ascending'ye gore sirala 
+			//using System.Linq.Dynamic.Core; dinamik filtreleme, sıralama veya gruplama gibi senaryolarda kullanışlıdır. 
 		}
 	}
 }
