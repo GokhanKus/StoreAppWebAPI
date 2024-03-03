@@ -7,6 +7,7 @@ using Services.Concrete;
 using Services.Contracts;
 using System.Runtime.CompilerServices;
 using Presentation.ActionFilters;
+using Entities.DTOs;
 
 namespace WebApi.ExtensionMethods
 {
@@ -59,6 +60,10 @@ namespace WebApi.ExtensionMethods
 					.WithExposedHeaders("X-Pagination");
 				});
 			});
+		}
+		public static void DataShaperInjections(this IServiceCollection services)
+		{
+			services.AddScoped<IDataShaper<BookDto>, DataShaper<BookDto>>();
 		}
 	}
 }

@@ -22,6 +22,7 @@ namespace WebApi
 
 			builder.Services.ActionFilterInjections();
 			builder.Services.ConfigureCors();
+			builder.Services.DataShaperInjections();
 
 			builder.Services.AddAutoMapper(typeof(Program));//WebApi
 
