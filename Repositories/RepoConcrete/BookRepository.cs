@@ -28,7 +28,6 @@ namespace Repositories.RepoConcrete
 				.FilterBooksWithName(bookParameters.SearchingTerm)
 				.FilterBooksWithPrice(bookParameters.MinPrice,bookParameters.MaxPrice)
 				.Sort(bookParameters.OrderBy)
-				.OrderBy(i => i.Id)
 				.ToListAsync();
 
 			return PagedList<Book>.ToPagedList(books, bookParameters.PageNumber, bookParameters.PageSize);
