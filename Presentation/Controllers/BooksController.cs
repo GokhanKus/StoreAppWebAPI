@@ -30,6 +30,7 @@ namespace Presentation.Controllers
 			_manager = manager;
 		}
 
+		[ServiceFilter(typeof(ValidateMediaTypeAttribute))]
 		[HttpGet]
 		public async Task<IActionResult> GetAllBooksAsync([FromQuery] BookParameters bookParameters) //books?pageNumber=2&pageSize=10
 		{

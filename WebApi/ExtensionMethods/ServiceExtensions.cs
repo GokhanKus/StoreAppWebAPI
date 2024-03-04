@@ -40,6 +40,7 @@ namespace WebApi.ExtensionMethods
 		public static void ActionFilterInjections(this IServiceCollection services)
 		{
 			services.AddScoped<ValidationFilterAttribute>();
+			services.AddScoped<ValidateMediaTypeAttribute>();
 			services.AddSingleton<LogFilterAttribute>(); //loglama islemi icin sadece bir tane nesnenin olusmasi yeterli o yuzden singleton
 		}
 		public static void ConfigureCors(this IServiceCollection services)
