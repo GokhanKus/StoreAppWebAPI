@@ -8,6 +8,9 @@ using Services.Contracts;
 using System.Runtime.CompilerServices;
 using Presentation.ActionFilters;
 using Entities.DTOs;
+using Microsoft.Identity.Client;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace WebApi.ExtensionMethods
 {
@@ -64,6 +67,44 @@ namespace WebApi.ExtensionMethods
 		public static void DataShaperInjections(this IServiceCollection services)
 		{
 			services.AddScoped<IDataShaper<BookDto>, DataShaper<BookDto>>();
+		}
+		public static void AddCustomMediaTypes(this IServiceCollection services)
+		{
+			services.Configure<MvcOptions>(config =>
+			{
+				var systemTextJsonOutputFormatter = config.OutputFormatters.OfType<SystemTextJsonOutputFormatter>()?.FirstOrDefault();
+
+				if (systemTextJsonOutputFormatter is not null)
+				{
+					systemTextJsonOutputFormatter.SupportedMediaTypes.Add("application/vnd.storeapp.hateoas+json");
+				}
+
+				var xmlOutputFormatter = config.OutputFormatters.OfType<XmlDataContractSerializerOutputFormatter>()?.FirstOrDefault();
+				if (xmlOutputFormatter is not null)
+				{
+					xmlOutputFormatter.SupportedMediaTypes.Add("application/vnd.storeapp.hateoas+json");
+				}
+			});
+			#region CustomMediaTypesAciklama
+			/*
+
+			Configure<MvcOptions> metodu, MVC (Model-View-Controller) seçeneklerini yapılandırmak için kullanılır. 
+			Bu, MVC'nin çeşitli özelliklerini, davranışlarını ve biçimleyicilerini yapılandırmaya izin verir.
+
+			OutputFormatters koleksiyonu, MVC tarafından kullanılan çıktı biçimleyicilerinin bir listesini içerir.
+
+			Önce, JSON çıktı biçimleyicisi (SystemTextJsonOutputFormatter) alınır ve 
+			özel bir medya türü olan "application/vnd.storeapp.hateoas+json" bu biçimleyicinin desteklediği medya türleri arasına eklenir.
+
+			Ardından, XML çıktı biçimleyicisi (XmlDataContractSerializerOutputFormatter) alınır ve 
+			aynı özel medya türü bu biçimleyicinin desteklediği medya türleri arasına eklenir.
+
+			Bu genişletme yöntemi, ASP.NET Core uygulamasına HATEOAS (Hypertext As The Engine Of Application State) desteği eklemek için yaygın olarak kullanılır. 
+			Bu şekilde, API'nin döndürdüğü yanıtların medya türlerini genişletebilir ve özel medya türlerini destekleyerek API'nin esnekliğini artırabilirsiniz. 
+			Bu, özellikle HATEOAS prensiplerini uygularken API'nin keşfedilebilirliğini artırmak ve 
+			istemcilere daha fazla kontrol ve esneklik sağlamak için kullanışlı olabilir.
+			 */
+			#endregion
 		}
 	}
 }
