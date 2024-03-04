@@ -31,8 +31,8 @@ namespace WebApi
 				config.RespectBrowserAcceptHeader = true; //artik apimizin icerik pazarligina acik oldugunu ve
 				config.ReturnHttpNotAcceptable = true;    //kabul edilmeyen format oldugunda 406 koduyla geri donecegiz
 			})
-			.AddCustomCsvFormatter()                    //kendi yazmis oldugumuz custom csvformatter
-			.AddXmlDataContractSerializerFormatters() //xml dosya formatini kabul edecegimizi ve bu formatta output verilebilecegini belirtiyoruz
+			.AddCustomCsvFormatter()                    //kendi yazmis oldugumuz custom csvformatter (expandoObject'ten sonra bu format calismiyor(cunku metottaki <bookDto> tipinde))
+			.AddXmlDataContractSerializerFormatters() //xml dosya formatini kabul edecegimizi ve bu formatta output verilebilecegini belirtiyoruz(expandoObject'ten sonra format bozuldu)
 			.AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly)
 			.AddNewtonsoftJson();
 
