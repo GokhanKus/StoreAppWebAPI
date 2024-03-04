@@ -256,3 +256,7 @@
 2024-03-03 17:54:12.5392 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.8.2366. Product version: 5.2.8+f586f1341c46fa38aaaff4c641e7f0fa7e813943. GlobalAssemblyCache: False
 2024-03-03 17:54:12.5392 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\ASP.NET_Projects\StoreAppWebAPI\WebApi\nlog.config
 2024-03-03 17:54:12.5641 Info Configuration initialized.
+2024-03-04 11:45:35.7779 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2024-03-04 11:45:35.8638 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.8.2366. Product version: 5.2.8+f586f1341c46fa38aaaff4c641e7f0fa7e813943. GlobalAssemblyCache: False
+2024-03-04 11:45:35.8745 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\ASP.NET_Projects\StoreAppWebAPI\WebApi\nlog.config
+2024-03-04 11:45:35.8930 Info Configuration initialized.
