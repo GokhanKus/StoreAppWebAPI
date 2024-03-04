@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities.Models;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace Services.Contracts
 	public interface IDataShaper<T>
 	{
 		//ExpandoObject: memberlari runtimeda dinamik olarak eklenebilen ve kaldirilabilen bir obje saglar
-		IEnumerable<ExpandoObject> ShapeData(IEnumerable<T> entities, string? fieldsString);
-		ExpandoObject ShapeData(T entities, string fieldsString);
+		IEnumerable<ShapedEntity> ShapeData(IEnumerable<T> entities, string? fieldsString);
+		ShapedEntity ShapeData(T entities, string fieldsString);
 	}
 }
