@@ -19,13 +19,13 @@ namespace Services.Concrete
 		private readonly IRepositoryManager _manager;
 		//private readonly ILoggerService _logger;
 		private readonly IMapper _mapper;
-		private readonly IDataShaper<BookDto> _shaper;
+		private readonly IDataShaper<BookDto> _dataShaper;
 		public BookService(IRepositoryManager manager, /*ILoggerService logger,*/ IMapper mapper, IDataShaper<BookDto> shaper)
 		{
 			_manager = manager;
 			//_logger = logger;
 			_mapper = mapper;
-			_shaper = shaper;
+			_dataShaper = shaper;
 		}
 		public async Task<BookDto> CreateOneBookAsync(BookDtoForInsertion bookDto)
 		{
@@ -48,7 +48,7 @@ namespace Services.Concrete
 
 			var booksWithMetaData = await _manager.BookRepository.GetAllBooksAsync(bookParameters, trackChanges);
 			var booksDto = _mapper.Map<IEnumerable<BookDto>>(booksWithMetaData);
-			var shapedData = _shaper.ShapeData(booksDto, bookParameters.Fields);
+			var shapedData = _dataShaper.ShapeData(booksDto, bookParameters.Fields);
 			return (books: shapedData, metaData: booksWithMetaData.MetaData);
 		}
 		public async Task<BookDto> GetOneBookByIdAsync(int id, bool trackChanges)
