@@ -46,10 +46,21 @@ namespace Services.Concrete
 
 		private List<Link> CreateForBook(HttpContext httpContext, BookDto bookDto, string fields)
 		{
+			var route = $"/api/{httpContext.GetRouteData().Values["controller"].ToString().ToLower()}";
 			var links = new List<Link>
 			{
-				new Link("a1","b1","c1"),
-				new Link("a2","b2","c2"),
+				new Link
+				{
+					Href = $"{route}/{bookDto.Id}",
+					Rel = "self", //ilgili kitabin kendisini tanimlayan bir linktir.
+					Method = "GET"
+				},
+				new Link
+				{
+					Href = route,
+					Rel = "create",
+					Method = "POST"
+				}
 			};
 			return links;
 		}
