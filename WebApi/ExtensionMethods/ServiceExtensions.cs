@@ -87,7 +87,7 @@ namespace WebApi.ExtensionMethods
 				var xmlOutputFormatter = config.OutputFormatters.OfType<XmlDataContractSerializerOutputFormatter>()?.FirstOrDefault();
 				if (xmlOutputFormatter is not null)
 				{
-					xmlOutputFormatter.SupportedMediaTypes.Add("application/vnd.storeapp.hateoas+json");
+					xmlOutputFormatter.SupportedMediaTypes.Add("application/vnd.storeapp.hateoas+xml");
 				}
 			});
 			#region CustomMediaTypesAciklama

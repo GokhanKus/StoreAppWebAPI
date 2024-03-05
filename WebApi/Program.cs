@@ -15,6 +15,21 @@ namespace WebApi
 
 			LogManager.Setup().LoadConfigurationFromFile(String.Concat(Directory.GetCurrentDirectory(), "/nlog.config")); //nlogu baslatip nlog.config dosyasindaki yapýlandirmayi yukler
 
+			builder.Services.AddControllers(config =>
+			{
+				config.RespectBrowserAcceptHeader = true; //artik apimizin icerik pazarligina acik oldugunu ve
+				config.ReturnHttpNotAcceptable = true;    //kabul edilmeyen format oldugunda 406 koduyla geri donecegiz
+			})
+			.AddXmlDataContractSerializerFormatters() //xml dosya formatini kabul edecegimizi ve bu formatta output verilebilecegini belirtiyoruz(expandoObject'ten sonra format bozuldu)
+			.AddCustomCsvFormatter()                    //kendi yazmis oldugumuz custom csvformatter (expandoObject'ten sonra bu format calismiyor(cunku metottaki <bookDto> tipinde))
+			.AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
+			//.AddNewtonsoftJson();
+
+			builder.Services.Configure<ApiBehaviorOptions>(options => //[ApiController] attribute ile beraberinde gelir (ApiBehaviorOptions)
+			{
+				options.SuppressModelStateInvalidFilter = true; //modelstate invalid olursa bad request donecegini soyleyelim
+			});
+
 			builder.Services.SqlConfiguration(builder.Configuration);
 			builder.Services.RepositoryInjections();
 			builder.Services.ServiceInjections();
@@ -28,20 +43,6 @@ namespace WebApi
 
 			builder.Services.AddAutoMapper(typeof(Program));//WebApi
 
-			builder.Services.AddControllers(config =>
-			{
-				config.RespectBrowserAcceptHeader = true; //artik apimizin icerik pazarligina acik oldugunu ve
-				config.ReturnHttpNotAcceptable = true;    //kabul edilmeyen format oldugunda 406 koduyla geri donecegiz
-			})
-			.AddCustomCsvFormatter()                    //kendi yazmis oldugumuz custom csvformatter (expandoObject'ten sonra bu format calismiyor(cunku metottaki <bookDto> tipinde))
-			.AddXmlDataContractSerializerFormatters() //xml dosya formatini kabul edecegimizi ve bu formatta output verilebilecegini belirtiyoruz(expandoObject'ten sonra format bozuldu)
-			.AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly)
-			.AddNewtonsoftJson();
-
-			builder.Services.Configure<ApiBehaviorOptions>(options => //[ApiController] attribute ile beraberinde gelir (ApiBehaviorOptions)
-			{
-				options.SuppressModelStateInvalidFilter = true; //modelstate invalid olursa bad request donecegini soyleyelim
-			});
 
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();

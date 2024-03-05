@@ -23,8 +23,8 @@ namespace Presentation.ActionFilters
 				context.Result = new BadRequestObjectResult("accept header is missing!");
 				return;
 			}
-			var mediaType = context.HttpContext.Response.Headers["Accept"].FirstOrDefault();
-			if (MediaTypeHeaderValue.TryParse(mediaType, out MediaTypeHeaderValue? outMediaType))//accept basligi varsa, ancak media turu gecerli degilse;
+			var mediaType = context.HttpContext.Request.Headers["Accept"].FirstOrDefault();
+			if (!MediaTypeHeaderValue.TryParse(mediaType, out MediaTypeHeaderValue? outMediaType))//accept basligi varsa, ancak media turu gecerli degilse;
 			{
 				context.Result = new BadRequestObjectResult($"Media type not present. " +
 					$"Please add Accept header with required media type.");
