@@ -35,8 +35,13 @@ namespace Presentation.Controllers
 		public async Task<IActionResult> GetAllBooksAsync([FromQuery] BookParameters bookParameters) //books?pageNumber=2&pageSize=10
 		{
 			//FromQuery diyerek bu ifadenin query string oldugunu queryden gelecegini belirtelim
-			var pagedResult = await _manager.BookService.GetAllBooksAsync(bookParameters, false);
-			Response.Headers["X-Pagination"] = JsonSerializer.Serialize(pagedResult.metaData);
+			var linkParameters = new LinkParameters
+			{
+				BookParameters = bookParameters,
+				HttpContext = HttpContext
+			};
+			var result = await _manager.BookService.GetAllBooksAsync(linkParameters, false);
+			Response.Headers["X-Pagination"] = JsonSerializer.Serialize(result.metaData);
 			#region Response.Headers["X-Pagination"]
 			/*
 			Bu kod parçası, bir HTTP yanıtının başlık bölümüne "X-Pagination" adında özel bir başlık ekler.Bu başlık, sayfalama işlemiyle ilgili ek bilgileri taşır.
@@ -49,8 +54,9 @@ namespace Presentation.Controllers
 			X-Pagination = {"CurrentPage":2,"TotalPage":5,"PageSize":20,"TotalCount":91,"HasPreviousPage":true,"HasNextPage":true}
 			*/
 			#endregion
-
-			return Ok(pagedResult.books);
+			return (result.linkResponse.HasLinks) ?
+				Ok(result.linkResponse.LinkedEntities) :
+				Ok(result.linkResponse.ShapedEntities);
 		}
 
 		[HttpGet("{id:int}")]
