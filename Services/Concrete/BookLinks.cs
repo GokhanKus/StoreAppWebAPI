@@ -41,9 +41,21 @@ namespace Services.Concrete
 				shapedBooks[index].Add("Links", bookLinks);
 			}
 			var bookCollection = new LinkCollectionWrapper<Entity>(shapedBooks);
+			CreateForBooks(httpContext, bookCollection);
 			return new LinkResponse { HasLinks = true, LinkedEntities = bookCollection };
 		}
-
+		private LinkCollectionWrapper<Entity> CreateForBooks(HttpContext httpContext, LinkCollectionWrapper<Entity> bookCollectionWrapper)
+		{
+			var route = $"/api/{httpContext.GetRouteData().Values["controller"].ToString().ToLower()}";
+			
+			bookCollectionWrapper.Links.Add(new Link
+			{
+				Href = route,
+				Rel = "selves", //kaynagin kendisini temsil eden tanimlayan link yani sayfada kac tane kitap varsa kitaplari tanimlayan link..
+				Method = "GET",
+			});
+			return bookCollectionWrapper;
+		}
 		private List<Link> CreateForBook(HttpContext httpContext, BookDto bookDto, string fields)
 		{
 			var route = $"/api/{httpContext.GetRouteData().Values["controller"].ToString().ToLower()}";
