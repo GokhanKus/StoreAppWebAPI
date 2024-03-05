@@ -69,6 +69,10 @@ namespace WebApi.ExtensionMethods
 		{
 			services.AddScoped<IDataShaper<BookDto>, DataShaper<BookDto>>();
 		}
+		public static void BookLinkInjections(this IServiceCollection services)
+		{
+			services.AddScoped<IBookLinks, BookLinks>();
+		}
 		public static void AddCustomMediaTypes(this IServiceCollection services)
 		{
 			services.Configure<MvcOptions>(config =>

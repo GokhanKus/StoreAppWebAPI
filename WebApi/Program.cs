@@ -24,6 +24,7 @@ namespace WebApi
 			builder.Services.ConfigureCors();
 			builder.Services.DataShaperInjections();
 			builder.Services.AddCustomMediaTypes();
+			builder.Services.BookLinkInjections();
 
 			builder.Services.AddAutoMapper(typeof(Program));//WebApi
 
