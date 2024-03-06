@@ -2,6 +2,7 @@
 using Entities.Exceptions;
 using Entities.Models;
 using Entities.RequestFeatures;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch; //for [HttpPatch]
 using Microsoft.AspNetCore.Mvc; //bir sınıfa controller olma ozelligini kazandırır
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -123,6 +124,15 @@ namespace Presentation.Controllers
 		{
 			await _manager.BookService.DeleteOneBookAsync(id, false);
 			return NoContent();
+		}
+
+		[HttpOptions]
+		public IActionResult GetBooksOptions()
+		{
+			Response.Headers.Add("Allow", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
+			return Ok();
+
+			//[HttpOptions]Http methodu, belirli bir route için desteklenen HTTP metodlarını tanımlamak için kullanılır. yani biz bu controllerda get, post vs hepsini kullandik onu belirtiyoruz.
 		}
 	}
 }
