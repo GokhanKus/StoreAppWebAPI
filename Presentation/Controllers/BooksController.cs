@@ -33,7 +33,7 @@ namespace Presentation.Controllers
 
 		[ServiceFilter(typeof(ValidateMediaTypeAttribute))]
 		[HttpHead]//[HttpHead]http methodu responseda body'si yoktur HttpGet gibi calisir ama farki response head gostermesidir
-		[HttpGet]
+		[HttpGet(Name = "GetAllBooksAsync")]
 		public async Task<IActionResult> GetAllBooksAsync([FromQuery] BookParameters bookParameters) //books?pageNumber=2&pageSize=10
 		{
 			//FromQuery diyerek bu ifadenin query string oldugunu queryden gelecegini belirtelim
@@ -70,8 +70,9 @@ namespace Presentation.Controllers
 
 			return Ok(book);
 		}
+
 		[ServiceFilter(typeof(ValidationFilterAttribute))]
-		[HttpPost]
+		[HttpPost(Name = "CreateOneBookAsync")]
 		public async Task<IActionResult> CreateOneBookAsync([FromBody] BookDtoForInsertion bookDto)
 		{
 			#region ValidationFilterAttribute sayesinde null veya modelstate.IsValid check yapmamiza gerek kalmadi
