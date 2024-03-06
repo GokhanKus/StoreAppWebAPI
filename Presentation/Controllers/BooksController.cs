@@ -32,6 +32,7 @@ namespace Presentation.Controllers
 		}
 
 		[ServiceFilter(typeof(ValidateMediaTypeAttribute))]
+		[HttpHead]//[HttpHead]http methodu responseda body'si yoktur HttpGet gibi calisir ama farki response head gostermesidir
 		[HttpGet]
 		public async Task<IActionResult> GetAllBooksAsync([FromQuery] BookParameters bookParameters) //books?pageNumber=2&pageSize=10
 		{
@@ -129,6 +130,7 @@ namespace Presentation.Controllers
 		[HttpOptions]
 		public IActionResult GetBooksOptions()
 		{
+			//Response.Headers.Append (Allow basligi onceden varsa, tanimlandiysa ve bu basliga yeni degerler eklemek istersek Append kullanilabilir)
 			Response.Headers.Add("Allow", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
 			return Ok();
 
