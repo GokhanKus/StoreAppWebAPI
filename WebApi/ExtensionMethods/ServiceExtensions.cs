@@ -11,6 +11,8 @@ using Entities.DTOs;
 using Microsoft.Identity.Client;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.OpenApi.Models;
+using Asp.Versioning;
 
 namespace WebApi.ExtensionMethods
 {
@@ -112,6 +114,16 @@ namespace WebApi.ExtensionMethods
 			istemcilere daha fazla kontrol ve esneklik sağlamak için kullanışlı olabilir.
 			 */
 			#endregion
+		}
+		public static void ConfigureVersioning(this IServiceCollection services)
+		{
+			services.AddApiVersioning(opt =>
+			{
+				opt.ReportApiVersions = true; //apinin version bilgisini response header bolumune ekliyoruz
+				opt.AssumeDefaultVersionWhenUnspecified = true; //user any bir version bilgisi talep etmezse, apinin default versionu ile (1.0) donus yapmis olacak
+				opt.DefaultApiVersion = new ApiVersion(1, 0); //1.0 surumu
+			});
+			//Microsoft.AspNetCore.Mvc.Versioning kurmadik, cunku deprecated(kullanimdan kaldirildi) onun yerine Asp.Versioning.Mvc package kuruldu
 		}
 	}
 }
