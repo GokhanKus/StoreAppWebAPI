@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace Presentation.Controllers
 {
-	[ApiVersion("1.0")]
+	//[ApiVersion("1.0")] ServiceExtension.cs'te yazdik
 	[ServiceFilter(typeof(LogFilterAttribute))] //calistirdigimiz butun actionlar loga dusecek => StoreAppWebAPI\WebApi\bin\Debug\net8.0\logs\2024-02-27_logfile.txt
 	[ApiController]
 	[Route("api/books")]

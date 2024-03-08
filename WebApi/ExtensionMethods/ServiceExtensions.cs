@@ -13,6 +13,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.OpenApi.Models;
 using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Presentation.Controllers;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using System.Reflection;
 
 namespace WebApi.ExtensionMethods
 {
@@ -123,8 +127,13 @@ namespace WebApi.ExtensionMethods
 				opt.AssumeDefaultVersionWhenUnspecified = true; //user any bir version bilgisi talep etmezse, apinin default versionu ile (1.0) donus yapmis olacak
 				opt.DefaultApiVersion = new ApiVersion(1, 0); //1.0 surumu
 				opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
-			}).AddMvc();//AddMvc() eklemeyince hata veriyordu paket farklı oldugu icin..
-			//Microsoft.AspNetCore.Mvc.Versioning kurmadik, cunku deprecated(kullanimdan kaldirildi) onun yerine Asp.Versioning.Mvc package kuruldu
+
+			}).AddMvc(options =>
+			{
+				options.Conventions.Controller<BooksController>().HasApiVersion(new ApiVersion(1, 0));
+				options.Conventions.Controller<BooksV2Controller>().HasDeprecatedApiVersion(new ApiVersion(2, 0));
+			});//AddMvc() eklemeyince hata veriyordu paket farklı oldugu icin..
+			   //Microsoft.AspNetCore.Mvc.Versioning kurmadik, cunku deprecated(kullanimdan kaldirildi) onun yerine Asp.Versioning.Mvc package kuruldu
 		}
 	}
 }
