@@ -26,7 +26,7 @@ namespace Repositories.RepoConcrete
 		{
 			var books = await FindAll(trackChanges)
 				.FilterBooksWithName(bookParameters.SearchingTerm)
-				.FilterBooksWithPrice(bookParameters.MinPrice,bookParameters.MaxPrice)
+				.FilterBooksWithPrice(bookParameters.MinPrice, bookParameters.MaxPrice)
 				.Sort(bookParameters.OrderBy)
 				.ToListAsync();
 
@@ -35,6 +35,14 @@ namespace Repositories.RepoConcrete
 		public async Task<Book> GetOneBookByIdAsync(int id, bool trackChanges)
 		{
 			return await FindByCondition(b => b.Id.Equals(id), trackChanges).SingleOrDefaultAsync();
+		}
+
+		public async Task<List<Book>> GetAllBooksAsync(bool trackChanges)
+		{
+			return await FindAll(trackChanges).OrderBy(b => b.Id).ToListAsync();
+			//return await _context.Books.ToListAsync();
+			//ilk ifade, DbSet üzerinde bir sorgu oluştururken ikinci ifade, veritabanına gitmek ve verileri doğrudan almak için bir sorgu yürütür.
+			//İlk ifade, daha fazla esneklik sağlayabilir çünkü DbSet'in üzerinde sorgular yapılabilirken, ikinci ifade daha doğrudan bir yaklaşım sunar. 
 		}
 	}
 }

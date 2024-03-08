@@ -14,6 +14,7 @@ namespace Services.Contracts
 	public interface IBookService
 	{
 		Task<(LinkResponse linkResponse, MetaData metaData)> GetAllBooksAsync(LinkParameters linkParameters, bool trackChanges);
+		Task<List<Book>> GetAllBooksAsync(bool trackChanges);//asiri yuklenebilen bir metot v2 bookscontroller icin daha yalin bir metot..
 		Task<BookDto> GetOneBookByIdAsync(int id, bool trackChanges);
 		Task<BookDto> CreateOneBookAsync(BookDtoForInsertion book);
 		Task DeleteOneBookAsync(int id, bool trackChanges);

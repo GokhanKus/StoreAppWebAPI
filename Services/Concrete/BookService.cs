@@ -52,6 +52,13 @@ namespace Services.Concrete
 			var links = _bookLinks.TryGenerateLinks(booksDto, linkParameters.BookParameters.Fields, linkParameters.HttpContext);
 			return (links, booksWithMetaData.MetaData); //linkResponse: links, metaData: booksWithMetaData.MetaData
 		}
+
+		public async Task<List<Book>> GetAllBooksAsync(bool trackChanges)
+		{
+			var books = await _manager.BookRepository.GetAllBooksAsync(trackChanges);
+			return books;
+		}
+
 		public async Task<BookDto> GetOneBookByIdAsync(int id, bool trackChanges)
 		{
 			var book = await GetOneBookByIdAndCheckExists(id, trackChanges);
