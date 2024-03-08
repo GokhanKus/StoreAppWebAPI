@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Presentation.Controllers
 {
-	[ApiVersion("2.0")]
+	[ApiVersion("2.0",Deprecated = true)] //bu versiyon deprecated edildi demis oluyoruz yani kullanimdan kaldirildigini artik supported olmadigi bilgisini client ile paylasiyoruz.
 	[ApiController]
 	[Route("api/books")]// => localhost:46515/api/v2.0/books
 	//[Route("api/v{version:apiVersion}/books")]// => localhost:46515/api/v2.0/books
