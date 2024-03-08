@@ -122,7 +122,8 @@ namespace WebApi.ExtensionMethods
 				opt.ReportApiVersions = true; //apinin version bilgisini response header bolumune ekliyoruz
 				opt.AssumeDefaultVersionWhenUnspecified = true; //user any bir version bilgisi talep etmezse, apinin default versionu ile (1.0) donus yapmis olacak
 				opt.DefaultApiVersion = new ApiVersion(1, 0); //1.0 surumu
-			});
+				
+			}).AddMvc();//AddMvc() eklemeyince hata veriyordu paket farklı oldugu icin..
 			//Microsoft.AspNetCore.Mvc.Versioning kurmadik, cunku deprecated(kullanimdan kaldirildi) onun yerine Asp.Versioning.Mvc package kuruldu
 		}
 	}
