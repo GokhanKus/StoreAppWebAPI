@@ -19,6 +19,7 @@ namespace WebApi
 			{
 				config.RespectBrowserAcceptHeader = true; //artik apimizin icerik pazarligina acik oldugunu ve
 				config.ReturnHttpNotAcceptable = true;    //kabul edilmeyen format oldugunda 406 koduyla geri donecegiz
+				config.CacheProfiles.Add("5mins", new CacheProfile { Duration = 300 });//controllerlarýn basina [ResponseCache(CacheProfileName = "5mins")] yazarak kullanilabilir
 			})
 			.AddXmlDataContractSerializerFormatters() //xml dosya formatini kabul edecegimizi ve bu formatta output verilebilecegini belirtiyoruz(expandoObject'ten sonra format bozuldu)
 			.AddCustomCsvFormatter()                    //kendi yazmis oldugumuz custom csvformatter (expandoObject'ten sonra bu format calismiyor(cunku metottaki <bookDto> tipinde))

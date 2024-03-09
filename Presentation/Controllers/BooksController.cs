@@ -26,6 +26,7 @@ namespace Presentation.Controllers
 	[ApiController]
 	[Route("api/books")]
 	//[Route("api/v{version:apiVersion}/books")] => localhost:46515/api/v2.0/books
+	[ResponseCache(CacheProfileName = "5mins")]
 	public class BooksController : ControllerBase
 	{
 		private readonly IServiceManager _manager;
