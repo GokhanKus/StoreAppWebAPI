@@ -37,6 +37,7 @@ namespace Presentation.Controllers
 		[ServiceFilter(typeof(ValidateMediaTypeAttribute))]
 		[HttpHead]//[HttpHead]http methodu responseda body'si yoktur HttpGet gibi calisir ama farki response head gostermesidir
 		[HttpGet(Name = "GetAllBooksAsync")]
+		[ResponseCache(Duration = 60)]//cachelenebilir olma ozelligi kazandirildi (max-age=60)60 sn icerisinde ayni request gelirse apiden, serverdan degil cacheden response doner
 		public async Task<IActionResult> GetAllBooksAsync([FromQuery] BookParameters bookParameters) //books?pageNumber=2&pageSize=10
 		{
 			//FromQuery diyerek bu ifadenin query string oldugunu queryden gelecegini belirtelim

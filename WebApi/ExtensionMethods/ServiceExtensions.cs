@@ -135,5 +135,31 @@ namespace WebApi.ExtensionMethods
 			});//AddMvc() eklemeyince hata veriyordu paket farklı oldugu icin..
 			   //Microsoft.AspNetCore.Mvc.Versioning kurmadik, cunku deprecated(kullanimdan kaldirildi) onun yerine Asp.Versioning.Mvc package kuruldu
 		}
+		public static void ConfigureResponseCaching(this IServiceCollection services)
+		{
+			services.AddResponseCaching();//location belirtilmezse default degeri any'dir yani hem client hem de proxydir.
+			//postman'de settings'te send no cache header ayarı off yap
+			#region Caching
+			/*
+			Expiration Model
+			Cache mekanizmasi client servera ilk kez bir request atarken cachable ise expiration modelde cache'de tutar ve cliente veriyi response eder.
+			(ornegin: max-age:60 (60 sn cachede duracak vs.))
+			ve client tekrar ayni requesti atarken bu sefer data api'den değil, cache'den gelmis olacak boylece api uzerinden yuku azaltmis oluyoruz.
+			60sn'den sonra tekrar ayni request gelirse bu request fresh olmadigi icin tekrar api'ye gider
+
+			bu cachelerin saklandigi, depolandigi yer olmasi lazim 3 yaklasim var;
+			1- client cache: istemcinin browserinda cacheleme mekanizmasinda o response saklanir
+			2- gateway cache: server tarafında saklanır orn client1 api/books talep etti sunucu tarafında bu responce cachelenip diger clientlar ile de paylasilabilir yani 
+			client2'de aynı kaynagi talep ederse servera gitmez cacheden yanit alir bu da paylasilabilir olan guzel bir ozelliktir
+			3- proxy cache: cacheleme islemi network uzerinde yapilir 
+
+			Validation Model
+			Expiration modeldeki gibidir, ama burada da ilk kez bir request attıktan sonra response header kisminda ETag attribute ve last-modified date bilgileri ile veriler tutulur.
+			orn: ETag:131523453 Last-Modified: Mon, 15 Oct 2023 11.20 GMT vs.
+			ve client tekrar ayni requesti attiginda bu kaynak hala fresh ise yani hala cache icerisinde ise 
+			304 not modified ile yeniden kaynak olusturmadan ilgili kaynagin fresh oldugunu ifade ederek cliente response edecegiz
+			 */
+			#endregion
+		}
 	}
 }
