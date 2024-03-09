@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Presentation.Controllers;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using System.Reflection;
+using Marvin.Cache.Headers;
 
 namespace WebApi.ExtensionMethods
 {
@@ -138,7 +139,7 @@ namespace WebApi.ExtensionMethods
 		public static void ConfigureResponseCaching(this IServiceCollection services)
 		{
 			services.AddResponseCaching();//location belirtilmezse default degeri any'dir yani hem client hem de proxydir.
-			//postman'de settings'te send no cache header ayarı off yap
+										  //postman'de settings'te send no cache header ayarı off yap
 			#region Caching
 			/*
 			Expiration Model
@@ -160,6 +161,19 @@ namespace WebApi.ExtensionMethods
 			304 not modified ile yeniden kaynak olusturmadan ilgili kaynagin fresh oldugunu ifade ederek cliente response edecegiz
 			 */
 			#endregion
+		}
+		public static void ConfigureHttpCacheHeaders(this IServiceCollection services)
+		{
+			services.AddHttpCacheHeaders(expirationOpt =>
+			{
+				expirationOpt.MaxAge = 70;// 70 saniye
+				expirationOpt.CacheLocation = CacheLocation.Public;//bunu private yaparsak controller'da [HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 80)] yazmalıyız
+			}, validationOpt =>
+			{
+				validationOpt.MustRevalidate = false;
+			});
+			//ETag, Expires, Last-Modified attributeleri response headers bolumune gelir
+			//alternatif cacheleme yontemleri: varnish
 		}
 	}
 }

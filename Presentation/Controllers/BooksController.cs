@@ -3,6 +3,7 @@ using Entities.DTOs;
 using Entities.Exceptions;
 using Entities.Models;
 using Entities.RequestFeatures;
+using Marvin.Cache.Headers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch; //for [HttpPatch]
 using Microsoft.AspNetCore.Mvc; //bir sınıfa controller olma ozelligini kazandırır
@@ -26,7 +27,8 @@ namespace Presentation.Controllers
 	[ApiController]
 	[Route("api/books")]
 	//[Route("api/v{version:apiVersion}/books")] => localhost:46515/api/v2.0/books
-	[ResponseCache(CacheProfileName = "5mins")]
+	//[ResponseCache(CacheProfileName = "5mins")] extension.cs'te konf. ayari yaptik artik burada tanimlamamiza gerek yok
+	//[HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 80)]
 	public class BooksController : ControllerBase
 	{
 		private readonly IServiceManager _manager;
@@ -38,7 +40,8 @@ namespace Presentation.Controllers
 		[ServiceFilter(typeof(ValidateMediaTypeAttribute))]
 		[HttpHead]//[HttpHead]http methodu responseda body'si yoktur HttpGet gibi calisir ama farki response head gostermesidir
 		[HttpGet(Name = "GetAllBooksAsync")]
-		[ResponseCache(Duration = 60)]//cachelenebilir olma ozelligi kazandirildi (max-age=60)60 sn icerisinde ayni request gelirse apiden, serverdan degil cacheden response doner
+		//[ResponseCache(Duration = 60)] extension.cs'te konf. ayari yaptik artik burada tanimlamamiza gerek yok
+		//cachelenebilir olma ozelligi kazandirildi (max-age=60)60 sn icerisinde ayni request gelirse apiden, serverdan degil cacheden response doner
 		public async Task<IActionResult> GetAllBooksAsync([FromQuery] BookParameters bookParameters) //books?pageNumber=2&pageSize=10
 		{
 			//FromQuery diyerek bu ifadenin query string oldugunu queryden gelecegini belirtelim

@@ -43,6 +43,7 @@ namespace WebApi
 			builder.Services.BookLinkInjections();
 			builder.Services.ConfigureVersioning();
 			builder.Services.ConfigureResponseCaching();
+			builder.Services.ConfigureHttpCacheHeaders();
 
 			builder.Services.AddAutoMapper(typeof(Program));//WebApi
 
@@ -67,7 +68,9 @@ namespace WebApi
 			}
 
 			app.UseCors("CorsPolicy");
+
 			app.UseResponseCaching();//cacheleme Corsdan sonra kullanilir cagrilir
+			app.UseHttpCacheHeaders();
 
 			app.UseAuthorization();
 
