@@ -18,6 +18,11 @@ using Presentation.Controllers;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using System.Reflection;
 using Marvin.Cache.Headers;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
+using AspNetCoreRateLimit;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Collections.Generic;
 
 namespace WebApi.ExtensionMethods
 {
@@ -174,6 +179,27 @@ namespace WebApi.ExtensionMethods
 			});
 			//ETag, Expires, Last-Modified attributeleri response headers bolumune gelir
 			//alternatif cacheleme yontemleri: varnish
+		}
+		public static void ConfigureRateLimiting(this IServiceCollection services)
+		{
+			var rateLimitRules = new List<RateLimitRule>
+			{
+				new RateLimitRule
+				{
+					Endpoint = "*", //tum endpointlere uygulansin, endpointlerin tamamini kapsasin
+					Limit = 3,
+					Period = "1m" //1 dk'da max 3 request, fazlası too many request 429 
+				}
+			};
+			services.Configure<IpRateLimitOptions>(opt =>
+			{
+				opt.GeneralRules = rateLimitRules; //genel ratelimit kurallarini iceren bir listeyi temsil ederç
+			});
+
+			services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();	//Bu, rate limit istek sayacının bellekte saklanacağını belirtir.
+			services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();					//Bu, IP adresi tabanlı politikaların bellekte saklanacağını belirtir.
+			services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();			//Bu, genel rate limit yapılandırmasını sağlar.
+			services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();//Rate limit isteklerinin nasıl işleneceğini belirten bir işlem stratejisi eklenir.Bu örnekte, AsyncKeyLockProcessingStrategy kullanılmaktadır.
 		}
 	}
 }

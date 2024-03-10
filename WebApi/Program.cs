@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NLog;
@@ -45,6 +46,10 @@ namespace WebApi
 			builder.Services.ConfigureResponseCaching();
 			builder.Services.ConfigureHttpCacheHeaders();
 
+			builder.Services.AddMemoryCache();
+			builder.Services.ConfigureRateLimiting();
+			builder.Services.AddHttpContextAccessor();
+
 			builder.Services.AddAutoMapper(typeof(Program));//WebApi
 
 
@@ -67,8 +72,8 @@ namespace WebApi
 				app.UseHsts();
 			}
 
+			app.UseIpRateLimiting();
 			app.UseCors("CorsPolicy");
-
 			app.UseResponseCaching();//cacheleme Corsdan sonra kullanilir cagrilir
 			app.UseHttpCacheHeaders();
 
