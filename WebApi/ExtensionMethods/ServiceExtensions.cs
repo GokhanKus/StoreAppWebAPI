@@ -47,6 +47,7 @@ namespace WebApi.ExtensionMethods
 		{
 			services.AddScoped<IServiceManager, ServiceManager>();
 			services.AddScoped<IBookService, BookService>();
+			services.AddScoped<IAuthService, AuthService>();
 		}
 		public static void LoggerServiceInjections(this IServiceCollection services)
 		{
@@ -199,9 +200,9 @@ namespace WebApi.ExtensionMethods
 				opt.GeneralRules = rateLimitRules; //genel ratelimit kurallarini iceren bir listeyi temsil ederç
 			});
 
-			services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();	//Bu, rate limit istek sayacının bellekte saklanacağını belirtir.
-			services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();					//Bu, IP adresi tabanlı politikaların bellekte saklanacağını belirtir.
-			services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();			//Bu, genel rate limit yapılandırmasını sağlar.
+			services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();  //Bu, rate limit istek sayacının bellekte saklanacağını belirtir.
+			services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();                  //Bu, IP adresi tabanlı politikaların bellekte saklanacağını belirtir.
+			services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();           //Bu, genel rate limit yapılandırmasını sağlar.
 			services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();//Rate limit isteklerinin nasıl işleneceğini belirten bir işlem stratejisi eklenir.Bu örnekte, AsyncKeyLockProcessingStrategy kullanılmaktadır.
 		}
 		public static void ConfigureIdentityDbContext(this IServiceCollection services)
