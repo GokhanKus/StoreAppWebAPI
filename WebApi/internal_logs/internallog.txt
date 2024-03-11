@@ -432,3 +432,39 @@
 2024-03-10 12:51:50.5451 Info Configuration initialized.
 2024-03-10 12:53:43.7309 Info AppDomain Shutting down. LogFactory closing...
 2024-03-10 12:53:43.7409 Info LogFactory has been closed.
+2024-03-11 13:34:19.0266 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2024-03-11 13:34:19.0701 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.8.2366. Product version: 5.2.8+f586f1341c46fa38aaaff4c641e7f0fa7e813943. GlobalAssemblyCache: False
+2024-03-11 13:34:19.0852 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\ASP.NET_Projects\StoreAppWebAPI\WebApi\nlog.config
+2024-03-11 13:34:19.0852 Info Configuration initialized.
+2024-03-11 13:34:21.6227 Info AppDomain Shutting down. LogFactory closing...
+2024-03-11 13:34:21.6227 Info LogFactory has been closed.
+2024-03-11 13:35:34.5106 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2024-03-11 13:35:34.5321 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.8.2366. Product version: 5.2.8+f586f1341c46fa38aaaff4c641e7f0fa7e813943. GlobalAssemblyCache: False
+2024-03-11 13:35:34.5448 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\ASP.NET_Projects\StoreAppWebAPI\WebApi\nlog.config
+2024-03-11 13:35:34.5577 Info Configuration initialized.
+2024-03-11 13:35:38.3922 Info AppDomain Shutting down. LogFactory closing...
+2024-03-11 13:35:38.3991 Info LogFactory has been closed.
+2024-03-11 13:36:39.6767 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2024-03-11 13:36:39.7005 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.8.2366. Product version: 5.2.8+f586f1341c46fa38aaaff4c641e7f0fa7e813943. GlobalAssemblyCache: False
+2024-03-11 13:36:39.7128 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\ASP.NET_Projects\StoreAppWebAPI\WebApi\nlog.config
+2024-03-11 13:36:39.7128 Info Configuration initialized.
+2024-03-11 13:36:40.6326 Info AppDomain Shutting down. LogFactory closing...
+2024-03-11 13:36:40.6466 Info LogFactory has been closed.
+2024-03-11 13:36:46.1179 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2024-03-11 13:36:46.1351 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.8.2366. Product version: 5.2.8+f586f1341c46fa38aaaff4c641e7f0fa7e813943. GlobalAssemblyCache: False
+2024-03-11 13:36:46.1351 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\ASP.NET_Projects\StoreAppWebAPI\WebApi\nlog.config
+2024-03-11 13:36:46.1618 Info Configuration initialized.
+2024-03-11 13:36:47.4361 Info AppDomain Shutting down. LogFactory closing...
+2024-03-11 13:36:47.4462 Info LogFactory has been closed.
+2024-03-11 13:36:57.3845 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2024-03-11 13:36:57.4022 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.8.2366. Product version: 5.2.8+f586f1341c46fa38aaaff4c641e7f0fa7e813943. GlobalAssemblyCache: False
+2024-03-11 13:36:57.4137 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\ASP.NET_Projects\StoreAppWebAPI\WebApi\nlog.config
+2024-03-11 13:36:57.4137 Info Configuration initialized.
+2024-03-11 13:36:58.9204 Info AppDomain Shutting down. LogFactory closing...
+2024-03-11 13:36:58.9280 Info LogFactory has been closed.
+2024-03-11 13:37:13.8370 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2024-03-11 13:37:13.8568 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.8.2366. Product version: 5.2.8+f586f1341c46fa38aaaff4c641e7f0fa7e813943. GlobalAssemblyCache: False
+2024-03-11 13:37:13.8661 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\ASP.NET_Projects\StoreAppWebAPI\WebApi\nlog.config
+2024-03-11 13:37:13.8661 Info Configuration initialized.
+2024-03-11 13:37:16.1616 Info AppDomain Shutting down. LogFactory closing...
+2024-03-11 13:37:16.1716 Info LogFactory has been closed.
