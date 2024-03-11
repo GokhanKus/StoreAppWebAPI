@@ -2,10 +2,11 @@
 using System.Reflection;
 using Entities.Models;
 using Repositories.Config;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Repositories.Context
 {
-    public class RepositoryContext : DbContext
+    public class RepositoryContext : IdentityDbContext<User>
     {
         public RepositoryContext(DbContextOptions<RepositoryContext> options) : base(options) //base ifadesi dbcontexti temsil ediyor, dbcontextteki baglanti dizesini kullanacagimizi belirtiyorz.
         {
@@ -15,7 +16,15 @@ namespace Repositories.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new BookConfig()); //BookConfig seeding classını calistirir.
+			/*
+			IdentityDbContext'ten kalitim aldiktan sonra migration alirken;
+			"Unable to create a 'DbContext' of type ''.The exception 'The entity type 'IdentityUserLogin<string>' requires a primary key to be defined.
+			If you intended to use a keyless entity type, call 'HasNoKey' in 'OnModelCreating'." 
+			hatasi aliyorduk, IdentityDbContext'in metoduna erismek ve identity ile ilgili tablolarin otomatik gelmesi icin 
+            base.OnModelCreating(modelBuilder); yaziyoruz.
+			*/
+			base.OnModelCreating(modelBuilder);
+			modelBuilder.ApplyConfiguration(new BookConfig()); //BookConfig seeding classını calistirir.
                                                                //modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); //butun seed datalari calistirir
         }
     }
