@@ -50,6 +50,9 @@ namespace WebApi
 			builder.Services.ConfigureRateLimiting();
 			builder.Services.AddHttpContextAccessor();
 
+			builder.Services.AddAuthentication();//username password middleware active
+			builder.Services.ConfigureIdentityDbContext();
+
 			builder.Services.AddAutoMapper(typeof(Program));//WebApi
 
 
@@ -77,7 +80,8 @@ namespace WebApi
 			app.UseResponseCaching();//cacheleme Corsdan sonra kullanilir cagrilir
 			app.UseHttpCacheHeaders();
 
-			app.UseAuthorization();
+			app.UseAuthentication(); //once dogrulama islemi
+			app.UseAuthorization();	//sonra yetkilendirme islemi yapilir
 
 			app.MapControllers();
 

@@ -23,6 +23,9 @@ using System.Threading.RateLimiting;
 using AspNetCoreRateLimit;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Collections.Generic;
+using Entities.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 
 namespace WebApi.ExtensionMethods
 {
@@ -200,6 +203,22 @@ namespace WebApi.ExtensionMethods
 			services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();					//Bu, IP adresi tabanlı politikaların bellekte saklanacağını belirtir.
 			services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();			//Bu, genel rate limit yapılandırmasını sağlar.
 			services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();//Rate limit isteklerinin nasıl işleneceğini belirten bir işlem stratejisi eklenir.Bu örnekte, AsyncKeyLockProcessingStrategy kullanılmaktadır.
+		}
+		public static void ConfigureIdentityDbContext(this IServiceCollection services)
+		{
+			services.AddIdentity<User, IdentityRole>(opt =>
+			{
+				opt.Password.RequireDigit = true; //kayit islemi sırasinda rakam zorunlulu
+				opt.Password.RequireUppercase = false;
+				opt.Password.RequireLowercase = false;
+				opt.Password.RequireNonAlphanumeric = false; //& % + gibi karakterler zorunlu olmasin
+				opt.Password.RequiredLength = 6; //min 6 karakter
+				opt.User.RequireUniqueEmail = true;//mailler unique olsun her userin maili kendine ait olsun vs.
+				opt.SignIn.RequireConfirmedAccount = false; //kayit isleminden sonra e posta onaylama zorunlulugu olmasin
+
+			})
+				.AddEntityFrameworkStores<RepositoryContext>()
+				.AddDefaultTokenProviders(); //jwt kullanacagiz ve sifre, mail, resetleme, degistirme, mail onaylama gibi islemler icin gereken token bilgisini üretmek icin AddDefaultTokenProviders().
 		}
 	}
 }
