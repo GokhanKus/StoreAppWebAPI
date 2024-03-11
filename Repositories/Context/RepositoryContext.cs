@@ -24,8 +24,10 @@ namespace Repositories.Context
             base.OnModelCreating(modelBuilder); yaziyoruz.
 			*/
 			base.OnModelCreating(modelBuilder);
-			modelBuilder.ApplyConfiguration(new BookConfig()); //BookConfig seeding classını calistirir.
-                                                               //modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); //butun seed datalari calistirir
+            //BookConfig seeding classını calistirir.
+            //modelBuilder.ApplyConfiguration(new BookConfig()); 
+            //modelBuilder.ApplyConfiguration(new RoleConfig());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); //butun seed datalari calistirir
         }
     }
 }
