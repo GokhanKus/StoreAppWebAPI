@@ -11,5 +11,6 @@ namespace Services.Contracts
 	public interface IAuthService
 	{
 		Task<IdentityResult> RegisterUser(UserForRegistrationDto userForRegistrationDto);
+		Task<IdentityResult> DeleteUserByEmail(string email);
 	}
 }

@@ -191,8 +191,8 @@ namespace WebApi.ExtensionMethods
 				new RateLimitRule
 				{
 					Endpoint = "*", //tum endpointlere uygulansin, endpointlerin tamamini kapsasin
-					Limit = 3,
-					Period = "1m" //1 dk'da max 3 request, fazlası too many request 429 
+					Limit = 10,
+					Period = "1m" //1 dk'da max 10 request, fazlası too many request 429 
 				}
 			};
 			services.Configure<IpRateLimitOptions>(opt =>

@@ -20,6 +20,18 @@ namespace Services.Concrete
 			_logger = logger;
 		}
 
+		public async Task<IdentityResult> DeleteUserByEmail(string email)
+		{
+			var user = await _userManager.FindByEmailAsync(email);
+
+			if (user == null)
+				throw new Exception("no users found");
+
+			var result = await _userManager.DeleteAsync(user);
+			return result;
+
+		}
+
 		public async Task<IdentityResult> RegisterUser(UserForRegistrationDto userForRegistrationDto)
 		{
 			var user = _mapper.Map<User>(userForRegistrationDto);
@@ -28,7 +40,7 @@ namespace Services.Concrete
 
 			if (result.Succeeded)
 				await _userManager.AddToRolesAsync(user, userForRegistrationDto.Roles);
-			
+
 			return result;
 		}
 	}

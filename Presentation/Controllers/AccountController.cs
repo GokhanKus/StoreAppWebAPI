@@ -37,5 +37,21 @@ namespace Presentation.Controllers
 			}
 			return StatusCode(201); //return Created();
 		}
+
+		[HttpDelete("{email}")]
+		public async Task<IActionResult> DeleteUser([FromRoute(Name = "email")] string email)
+		{
+			var result = await _services.AuthService.DeleteUserByEmail(email);
+			if (!result.Succeeded)
+			{
+				foreach (var err in result.Errors)
+				{
+					ModelState.TryAddModelError(err.Code, err.Description);
+				}
+				return BadRequest(ModelState);
+			}
+			return StatusCode(201); //return Created();
+
+		}
 	}
 }
