@@ -13,6 +13,8 @@ namespace Services.Concrete
 		private readonly IMapper _mapper;
 		private readonly ILoggerService _logger;
 		//private readonly IConfiguration _configuration;
+
+		private User? _user;
 		public AuthService(IMapper mapper, UserManager<User> userManager, ILoggerService logger)
 		{
 			_userManager = userManager;
@@ -40,6 +42,16 @@ namespace Services.Concrete
 
 			if (result.Succeeded)
 				await _userManager.AddToRolesAsync(user, userForRegistrationDto.Roles);
+
+			return result;
+		}
+
+		public async Task<bool> ValidateUser(UserForAuthenticationDto userForAuthDto)
+		{
+			_user = await _userManager.FindByNameAsync(userForAuthDto.UserName);
+			var result = (_user != null && await _userManager.CheckPasswordAsync(_user, userForAuthDto.Password));
+			if (!result)
+				_logger.LogWarning($"{nameof(ValidateUser)} : Authentication failed. Wrong username or password.");
 
 			return result;
 		}

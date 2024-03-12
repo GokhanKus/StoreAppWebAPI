@@ -12,5 +12,6 @@ namespace Services.Contracts
 	{
 		Task<IdentityResult> RegisterUser(UserForRegistrationDto userForRegistrationDto);
 		Task<IdentityResult> DeleteUserByEmail(string email);
+		Task<bool> ValidateUser(UserForAuthenticationDto userForAuthDto);
 	}
 }
