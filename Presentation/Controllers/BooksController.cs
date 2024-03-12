@@ -4,6 +4,7 @@ using Entities.Exceptions;
 using Entities.Models;
 using Entities.RequestFeatures;
 using Marvin.Cache.Headers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch; //for [HttpPatch]
 using Microsoft.AspNetCore.Mvc; //bir sınıfa controller olma ozelligini kazandırır
@@ -37,6 +38,7 @@ namespace Presentation.Controllers
 			_manager = manager;
 		}
 
+		[Authorize]
 		[ServiceFilter(typeof(ValidateMediaTypeAttribute))]
 		[HttpHead]//[HttpHead]http methodu responseda body'si yoktur HttpGet gibi calisir ama farki response head gostermesidir
 		[HttpGet(Name = "GetAllBooksAsync")]
