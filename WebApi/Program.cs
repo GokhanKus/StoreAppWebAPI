@@ -50,8 +50,8 @@ namespace WebApi
 			builder.Services.ConfigureRateLimiting();
 			builder.Services.AddHttpContextAccessor();
 
-			builder.Services.AddAuthentication();//username password middleware active
 			builder.Services.ConfigureIdentityDbContext();
+			builder.Services.ConfigureJWT(builder.Configuration);//(Add.Authentication()) bunun icinde username password middleware active
 
 			builder.Services.AddAutoMapper(typeof(Program));//WebApi
 

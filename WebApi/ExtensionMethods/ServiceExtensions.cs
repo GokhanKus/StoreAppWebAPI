@@ -1,31 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NLog.Common;
 using Repositories.Context;
 using Repositories.RepoConcrete;
 using Repositories.RepoContracts;
 using Services.Concrete;
 using Services.Contracts;
-using System.Runtime.CompilerServices;
 using Presentation.ActionFilters;
 using Entities.DTOs;
-using Microsoft.Identity.Client;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.OpenApi.Models;
 using Asp.Versioning;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Presentation.Controllers;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using System.Reflection;
 using Marvin.Cache.Headers;
-using Microsoft.AspNetCore.RateLimiting;
-using System.Threading.RateLimiting;
 using AspNetCoreRateLimit;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Collections.Generic;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace WebApi.ExtensionMethods
 {
@@ -220,6 +211,76 @@ namespace WebApi.ExtensionMethods
 			})
 				.AddEntityFrameworkStores<RepositoryContext>()
 				.AddDefaultTokenProviders(); //jwt kullanacagiz ve sifre, mail, resetleme, degistirme, mail onaylama gibi islemler icin gereken token bilgisini üretmek icin AddDefaultTokenProviders().
+		}
+		public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
+		{
+			var jwtSettings = configuration.GetSection("JwtSettings");
+			var secretKey = jwtSettings["secretKey"]; //appsettings.json'deki jwtsetting sectionundaki secret key value'si
+
+			services.AddAuthentication(opt =>
+			{
+				opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+				opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+			}).AddJwtBearer(options =>
+			{
+				//x.RequireHttpsMetadata = false;
+				options.TokenValidationParameters = new TokenValidationParameters
+				{
+					ValidateIssuer = true,
+					ValidateLifetime = true,
+					ValidateIssuerSigningKey = true,
+					ValidateAudience = true,
+					ValidIssuer = jwtSettings["validIssuer"], //tokenin üreticisi dagiticisi
+					ValidAudience = jwtSettings["validAudience"],
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration.GetSection("AppSettings:Secret").Value ?? ""))
+				};
+			});
+			#region JWT, Bearer Token, Stateless
+			/*
+			 JWT (JSON Web Token), kullanıcı kimlik doğrulama ve yetkilendirme için kullanılan bir standarttır. 
+			JWT, JSON formatında bilgi taşıyan bir token türüdür ve üç ana bölümden oluşur: başlık (header), yük (payload) ve imza (signature).
+			Başlık (Header): JWT'nin algoritma ve token türü gibi meta bilgilerini içerir. Başlık JSON formatındadır ve Base64URL kodlanmış bir string olarak token içinde bulunur.
+			Örnek Başlık:
+			json
+			Copy code
+			{
+			  "alg": "HS256",
+			  "typ": "JWT"
+			}
+			Yük (Payload): Gerçek verileri içerir. Örneğin, kullanıcı kimliği, rol bilgisi vb. gibi bilgiler burada bulunabilir. 
+			Payload da JSON formatında ve Base64URL kodlanmış bir string olarak token içinde bulunur.
+			Örnek Yük:
+
+			json
+			Copy code
+			{
+			  "sub": "1234567890",
+			  "name": "John Doe",
+			  "role": "admin"
+			}
+			İmza (Signature): Token'ın doğruluğunu doğrulamak için kullanılır. İmza, başlık ve yükün belirli bir algoritma ve 
+			gizli bir anahtar kullanılarak birleştirilmesi ve ardından bu birleşik verinin hashlenmesiyle elde edilir.
+
+			JWT'nin kullanılma amacı, bir istemci (genellikle bir tarayıcı veya bir mobil uygulama) ile bir sunucu arasında güvenli bir şekilde bilgi alışverişi yapmaktır. 
+			İstemci, yetkilendirme amacıyla bir JWT alır ve bu JWT'yi her istekle sunucuya gönderir. Sunucu, bu JWT'yi doğrular ve token içindeki bilgileri kullanarak isteği işler.
+
+			Bearer Token, JWT'nin bir türüdür ve HTTP taleplerinde yetkilendirme amacıyla kullanılır. 
+			İstemci, yetkilendirme yapıldıktan sonra sunucudan bir JWT alır ve bu JWT'yi her istekle "Authorization" başlığı altında "Bearer" anahtar kelimesi ile birlikte sunucuya gönderir.
+
+			Stateless (Durum Bağımsız) kavramı, 
+			Bir sistem veya protokolün, herhangi bir durumu (state) saklamadan çalışabilmesini ifade eder. 
+			Bir sistem veya protokolün durum bağımsız olması, herhangi bir kullanıcı oturumunu veya geçmiş etkileşimleri saklamak zorunda olmadığı anlamına gelir.
+			Web uygulamalarında "stateless" terimi genellikle sunucu tarafında kullanılır. 
+			Özellikle, sunucu tarafında oturum bilgilerini saklamak yerine, her istekle gelen bilgilere dayanarak işlem yapmak anlamına gelir. 
+			Bu genellikle güvenlik açısından tercih edilir, çünkü sunucu her isteği kendi içinde bağımsız olarak işler ve oturum bilgilerini saklamak zorunda olmadığı için güvenlik riski azalır.
+
+			Örneğin, JWT (JSON Web Token) tabanlı kimlik doğrulama ve yetkilendirme sistemleri "stateless" bir yaklaşımı benimserler. 
+			Burada, sunucu her istekle gelen JWT'yi doğrular ve bu JWT içindeki bilgilere dayanarak işlem yapar. Sunucu, kullanıcının oturum durumunu saklamaz, çünkü her istekle gelen JWT, kullanıcının kimliğini ve yetkilendirme bilgilerini içerir.
+
+			Bu "stateless" yaklaşım, sunucunun ölçeklenebilirliğini artırır ve bakımını kolaylaştırır. 
+
+			 */
+			#endregion
 		}
 	}
 }
