@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Configuration.Annotations;
 using Entities.DTOs;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
@@ -7,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Services.Contracts;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Services.Concrete
@@ -27,12 +29,25 @@ namespace Services.Concrete
 			_configuration = configuration;
 		}
 
-		public async Task<string> CreateToken()
+		public async Task<TokenDto> CreateToken(bool populateExpiry)
 		{
 			var signinCredentials = GetSignInCredentials(); //kimlik bilgileri alindi
 			var claims = await GetClaims();                 //claimsler alindi (rol, hak, iddia)
 			var tokenOptions = GenerateTokenOptions(signinCredentials, claims);//token olusturma secenekleri generate edildi
-			return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+
+			var refreshToken = GenerateRefreshToken();
+			_user.RefreshToken = refreshToken;
+
+			if (populateExpiry)
+				_user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+
+			await _userManager.UpdateAsync(_user);
+			var accessToken = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+			return new TokenDto
+			{
+				AccessToken = accessToken,
+				RefreshToken = refreshToken
+			};
 		}
 
 
@@ -99,8 +114,45 @@ namespace Services.Concrete
 				claims: claims,
 				expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["expires"])),
 				signingCredentials: signinCredentials);
-			
+
 			return tokenOptions;
+		}
+		private string GenerateRefreshToken()
+		{
+			var randomNumber = new byte[32];
+			using (var rng = RandomNumberGenerator.Create())//masrafli is yapilacaksa using kullanilabilir
+			{
+				rng.GetBytes(randomNumber);
+				return Convert.ToBase64String(randomNumber);
+			}
+			//scope'tan cikinca ilgili kaynak serbest birakilir garbage collector
+		}
+		private ClaimsPrincipal GetPrincipalFromExpiredToken(string token) //suresi gecmis olan tokendan bu ifadeyi alalim
+		{
+			var jwtSettings = _configuration.GetSection("JwtSettings");
+			var secretKey = jwtSettings["secretKey"];
+			var tokenValidationParameters = new TokenValidationParameters
+			{
+				ValidateIssuer = true,
+				ValidateLifetime = true,
+				ValidateIssuerSigningKey = true,
+				ValidateAudience = true,
+				ValidIssuer = jwtSettings["validIssuer"], //tokenin üreticisi dagiticisi
+				ValidAudience = jwtSettings["validAudience"],
+				IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+			};
+
+			var tokenHandler = new JwtSecurityTokenHandler();
+			SecurityToken securityToken;//degeri out parametresi ile belirleniyor
+
+			var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+
+			var jwtSecurityToken = securityToken as JwtSecurityToken; //securityToken'i JwtSecurityToken'e convert edelim, basarisiz olursa jwtSecurityToken null
+
+			if (jwtSecurityToken is null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+				throw new SecurityTokenException("Invalid Token");
+
+			return principal;
 		}
 	}
 }

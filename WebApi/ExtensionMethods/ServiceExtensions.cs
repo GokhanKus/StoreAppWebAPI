@@ -232,7 +232,7 @@ namespace WebApi.ExtensionMethods
 					ValidateAudience = true,
 					ValidIssuer = jwtSettings["validIssuer"], //tokenin üreticisi dagiticisi
 					ValidAudience = jwtSettings["validAudience"],
-					IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey))
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
 				};
 			});
 			#region JWT, Bearer Token, Stateless

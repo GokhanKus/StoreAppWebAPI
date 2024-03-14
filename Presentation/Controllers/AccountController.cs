@@ -61,10 +61,9 @@ namespace Presentation.Controllers
 			if (!await _services.AuthService.ValidateUser(userForAuthDto))
 				return Unauthorized(); //401
 
-			return Ok(new
-			{
-				Token = await _services.AuthService.CreateToken()
-			});
+			var tokenDto = await _services.AuthService.CreateToken(populateExpiry: true);//token sonlanma suresi true ise tokenin suresi doldu demektir.
+			return Ok(tokenDto);
+
 			//[Authorize] olan GetAllBooksAsync metoduna erisebilmek icin uretilen token ile postman'de authorization kısmında bearer token secerek erisilebilir
 			//Postmande Books'ta Autherization kismina Tokeni ver, crud islemlerinde(booksconroller actionlarında) autherization kismina type: Inherit auth from parent
 			//Postman icin access token olusturuldu,Postmande Books'ta Autherization kismina Tokeni {{accessToken}}degiskenine aldik ve
