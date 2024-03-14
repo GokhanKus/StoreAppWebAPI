@@ -66,6 +66,7 @@ namespace Presentation.Controllers
 				Token = await _services.AuthService.CreateToken()
 			});
 			//[Authorize] olan GetAllBooksAsync metoduna erisebilmek icin uretilen token ile postman'de authorization kısmında bearer token secerek erisilebilir
+			//Postmande Books'ta Autherization kismina Tokeni ver, crud islemlerinde(booksconroller actionlarında) autherization kismina type: Inherit auth from parent
 		}
 	}
 }
