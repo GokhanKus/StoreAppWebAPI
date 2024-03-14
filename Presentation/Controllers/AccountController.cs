@@ -67,6 +67,12 @@ namespace Presentation.Controllers
 			});
 			//[Authorize] olan GetAllBooksAsync metoduna erisebilmek icin uretilen token ile postman'de authorization kısmında bearer token secerek erisilebilir
 			//Postmande Books'ta Autherization kismina Tokeni ver, crud islemlerinde(booksconroller actionlarında) autherization kismina type: Inherit auth from parent
+			//Postman icin access token olusturuldu,Postmande Books'ta Autherization kismina Tokeni {{accessToken}}degiskenine aldik ve
+			//Account / Authenticate (Generate JWT)'de tests kismindaki kod.
+
+			//Refresh Token
+			//kurumsal firmalarda genellikle tokenlerin suresi 30 dk, 1 saat değil de 5 dk gibi kısa süreler de olur, cunku encode edilen bu tokenler decoder ile basit bir sekilde cozulecegi icin ve
+			//kotu niyetli kisilerin bu tokeni alıp kullanabilecegi icin 5 dk gibi kısa sureli tokenler olusturulur ve refresh edilir refresh token bu yuzden kullanilir
 		}
 	}
 }
