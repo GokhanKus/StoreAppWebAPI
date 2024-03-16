@@ -73,5 +73,13 @@ namespace Presentation.Controllers
 			//kurumsal firmalarda genellikle tokenlerin suresi 30 dk, 1 saat değil de 5 dk gibi kısa süreler de olur, cunku encode edilen bu tokenler decoder ile basit bir sekilde cozulecegi icin ve
 			//kotu niyetli kisilerin bu tokeni alıp kullanabilecegi icin 5 dk gibi kısa sureli tokenler olusturulur ve refresh edilir refresh token bu yuzden kullanilir
 		}
+
+		[HttpPost("refresh")]
+		[ServiceFilter(typeof(ValidationFilterAttribute))]
+		public async Task<IActionResult> Refresh([FromBody] TokenDto tokenDto)
+		{
+			var tokenDtoToReturn = await _services.AuthService.RefreshToken(tokenDto);
+			return Ok(tokenDtoToReturn);
+		}
 	}
 }

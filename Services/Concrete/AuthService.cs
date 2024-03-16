@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.Configuration.Annotations;
 using Entities.DTOs;
+using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -117,7 +118,7 @@ namespace Services.Concrete
 
 			return tokenOptions;
 		}
-		private string GenerateRefreshToken()
+		private string GenerateRefreshToken()//jwt olmayan sifrelenmis bir token ifadesi
 		{
 			var randomNumber = new byte[32];
 			using (var rng = RandomNumberGenerator.Create())//masrafli is yapilacaksa using kullanilabilir
@@ -153,6 +154,18 @@ namespace Services.Concrete
 				throw new SecurityTokenException("Invalid Token");
 
 			return principal;
+		}
+
+		public async Task<TokenDto> RefreshToken(TokenDto tokenDto)
+		{
+			var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
+			var user = await _userManager.FindByNameAsync(principal.Identity.Name);
+
+			if (user is null || user.RefreshToken != tokenDto.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+				throw new RefreshTokenBadRequestException();
+
+			_user = user;
+			return await CreateToken(populateExpiry: false);
 		}
 	}
 }
