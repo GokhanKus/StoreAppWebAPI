@@ -287,7 +287,18 @@ namespace WebApi.ExtensionMethods
 		{
 			services.AddSwaggerGen(s =>
 			{
-				s.SwaggerDoc("v1", new OpenApiInfo { Title = "StoreApp", Version = "v1" });
+				s.SwaggerDoc("v1", new OpenApiInfo 
+				{
+					Title = "StoreApp", 
+					Version = "v1",
+					Description = "StoreApp ASP.NET Core Web API",
+					TermsOfService = new Uri("https://www.btkakademi.gov.tr/"),
+					Contact = new OpenApiContact
+					{
+						Name = "Gökhan Kuş",
+						Email = "gkus1998@hotmail.com"
+					},
+				});
 				s.SwaggerDoc("v2", new OpenApiInfo { Title = "StoreApp", Version = "v2" });
 
 				//"Bearer" isimli bir güvenlik şeması tanımlanır.Bu, Swagger UI'ın kullanıcıdan bir JWT tokenı almasını sağlar.
