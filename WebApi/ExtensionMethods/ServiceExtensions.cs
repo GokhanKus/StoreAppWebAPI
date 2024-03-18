@@ -228,9 +228,9 @@ namespace WebApi.ExtensionMethods
 				options.TokenValidationParameters = new TokenValidationParameters
 				{
 					ValidateIssuer = true,
+					ValidateAudience = true,
 					ValidateLifetime = true,
 					ValidateIssuerSigningKey = true,
-					ValidateAudience = true,
 					ValidIssuer = jwtSettings["validIssuer"], //tokenin üreticisi dagiticisi
 					ValidAudience = jwtSettings["validAudience"],
 					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
@@ -289,7 +289,35 @@ namespace WebApi.ExtensionMethods
 			{
 				s.SwaggerDoc("v1", new OpenApiInfo { Title = "StoreApp", Version = "v1" });
 				s.SwaggerDoc("v2", new OpenApiInfo { Title = "StoreApp", Version = "v2" });
+
+				//"Bearer" isimli bir güvenlik şeması tanımlanır.Bu, Swagger UI'ın kullanıcıdan bir JWT tokenı almasını sağlar.
+				s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+				{
+					In = ParameterLocation.Header,
+					Description = "Place to add JWT with Bearer",
+					Name = "Authorization",
+					Type = SecuritySchemeType.ApiKey,
+					BearerFormat = "JWT",
+					Scheme = "Bearer"
+				});
+				// Bu, belgelerin belirli bir güvenlik şemasına ihtiyacı olduğunu belirtir. Bu durumda, "Bearer" güvenlik şemasının belgelere ihtiyacı olduğunu belirtir.
+				s.AddSecurityRequirement(new OpenApiSecurityRequirement
+				{
+					{
+						new OpenApiSecurityScheme
+						{
+							Reference = new OpenApiReference
+							{
+								Type = ReferenceType.SecurityScheme,
+								Id="Bearer"
+							},
+							Name = "Bearer"
+						},
+						new List<string>()
+					}
+				});
 			});
+
 		}
 	}
 }
