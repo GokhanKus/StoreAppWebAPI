@@ -13,6 +13,7 @@ namespace Presentation.Controllers
 {
 	[ApiController]
 	[Route("api/auth")]
+	[ApiExplorerSettings(GroupName = "v1")]
 	public class AccountController : ControllerBase
 	{
 		private readonly IServiceManager _services;

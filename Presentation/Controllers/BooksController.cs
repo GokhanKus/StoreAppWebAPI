@@ -13,6 +13,7 @@ namespace Presentation.Controllers
 	[ServiceFilter(typeof(LogFilterAttribute))] //calistirdigimiz butun actionlar loga dusecek => StoreAppWebAPI\WebApi\bin\Debug\net8.0\logs\2024-02-27_logfile.txt
 	[ApiController]
 	[Route("api/books")]
+	[ApiExplorerSettings(GroupName = "v1")]
 	//[Route("api/v{version:apiVersion}/books")] => localhost:46515/api/v2.0/books
 	//[ResponseCache(CacheProfileName = "5mins")] extension.cs'te konf. ayari yaptik artik burada tanimlamamiza gerek yok
 	//[HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 80)]

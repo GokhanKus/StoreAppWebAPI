@@ -1,3 +1,4 @@
+using Asp.Versioning.ApiExplorer;
 using AspNetCoreRateLimit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,7 @@ namespace WebApi
 				options.SuppressModelStateInvalidFilter = true; //modelstate invalid olursa bad request donecegini soyleyelim
 			});
 
+
 			builder.Services.SqlConfiguration(builder.Configuration);
 			builder.Services.RepositoryInjections();
 			builder.Services.ServiceInjections();
@@ -55,9 +57,8 @@ namespace WebApi
 
 			builder.Services.AddAutoMapper(typeof(Program));//WebApi
 
-
 			builder.Services.AddEndpointsApiExplorer();
-			builder.Services.AddSwaggerGen();
+			builder.Services.ConfigureSwagger();
 
 			var app = builder.Build();
 
@@ -68,7 +69,15 @@ namespace WebApi
 			if (app.Environment.IsDevelopment())
 			{
 				app.UseSwagger();
-				app.UseSwaggerUI();
+				app.UseSwaggerUI(s =>
+				{
+					s.SwaggerEndpoint("/swagger/v1/swagger.json", "StoreApp V1");
+					s.SwaggerEndpoint("/swagger/v2/swagger.json", "StoreApp V2");
+					//eger cok sayida versiyon varsa foreach ile donebiliriz tek tek yazmak mantýklý olmaz
+					// Tüm API versiyonlarý için Swagger belgelerinin endpointlerini otomatik olarak oluþturur
+					//var provider = app.ApplicationServices.GetRequiredService<IApiVersionDescriptionProvider>();
+					//foreach (var description in provider.ApiVersionDescriptions)
+				});
 			}
 			if (app.Environment.IsProduction())
 			{
@@ -81,7 +90,7 @@ namespace WebApi
 			app.UseHttpCacheHeaders();
 
 			app.UseAuthentication(); //once dogrulama islemi
-			app.UseAuthorization();	//sonra yetkilendirme islemi yapilir
+			app.UseAuthorization(); //sonra yetkilendirme islemi yapilir
 
 			app.MapControllers();
 

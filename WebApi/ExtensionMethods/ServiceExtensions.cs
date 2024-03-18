@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.OpenApi.Models;
 
 namespace WebApi.ExtensionMethods
 {
@@ -281,6 +282,14 @@ namespace WebApi.ExtensionMethods
 
 			 */
 			#endregion
+		}
+		public static void ConfigureSwagger(this IServiceCollection services)
+		{
+			services.AddSwaggerGen(s =>
+			{
+				s.SwaggerDoc("v1", new OpenApiInfo { Title = "StoreApp", Version = "v1" });
+				s.SwaggerDoc("v2", new OpenApiInfo { Title = "StoreApp", Version = "v2" });
+			});
 		}
 	}
 }

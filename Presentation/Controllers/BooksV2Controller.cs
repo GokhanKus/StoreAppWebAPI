@@ -14,6 +14,7 @@ namespace Presentation.Controllers
 	[ApiController]
 	[Route("api/books")]// => localhost:46515/api/v2.0/books
 	//[Route("api/v{version:apiVersion}/books")]// => localhost:46515/api/v2.0/books
+	[ApiExplorerSettings(GroupName = "v2")]
 	public class BooksV2Controller : ControllerBase
 	{
 		private readonly IServiceManager _manager;
