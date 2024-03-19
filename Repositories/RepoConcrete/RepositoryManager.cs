@@ -15,6 +15,7 @@ namespace Repositories.RepoConcrete
 	{
 		private readonly RepositoryContext _context;
 		private readonly IBookRepository _bookRepository;
+		private readonly ICategoryRepository _categoryRepository;
 		//private readonly Lazy<IBookRepository> _bookRepository;
 		#region Lazy loading & Eager loading
 		/*
@@ -31,13 +32,17 @@ namespace Repositories.RepoConcrete
 		lazy loading her biri icin sorgu atacaktır ve eagera gore daha maliyetli olacaktır
 		 */
 		#endregion
-		public RepositoryManager(RepositoryContext context, IBookRepository bookRepository)
+		public RepositoryManager(RepositoryContext context, IBookRepository bookRepository, ICategoryRepository categoryRepository)
 		{
 			_context = context;
 			_bookRepository = bookRepository;
+			_categoryRepository = categoryRepository;
 			/*new Lazy<IBookRepository>(() => new BookRepository(_context));*/
 		}
 		public IBookRepository BookRepository => _bookRepository;
+
+		public ICategoryRepository CategoryRepository => _categoryRepository;
+
 		public async Task SaveAsync()
 		{
 			await _context.SaveChangesAsync();

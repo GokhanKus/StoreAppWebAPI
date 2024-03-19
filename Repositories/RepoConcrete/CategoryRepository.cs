@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,6 +27,7 @@ namespace Repositories.RepoConcrete
 		public async Task<Category> GetOneCategoryByIdAsync(int id, bool trackChanges)
 		{
 			return await FindByCondition((c => c.Id.Equals(id)), trackChanges).FirstOrDefaultAsync();
+
 		}
 	}
 }

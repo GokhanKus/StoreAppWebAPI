@@ -11,7 +11,8 @@ namespace Repositories.RepoContracts
 	public interface IRepositoryManager
 	{
 		IBookRepository BookRepository { get; }
-		Task SaveAsync(); 
+		ICategoryRepository CategoryRepository { get; }
+		Task SaveAsync();
 		//void Save(); void tipindekini async hale getirirken Task<void> yazmayiz direkt Task yazariz
 	}
 }

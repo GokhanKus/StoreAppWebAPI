@@ -34,6 +34,7 @@ namespace WebApi.ExtensionMethods
 		{
 			services.AddScoped<IRepositoryManager, RepositoryManager>();
 			services.AddScoped<IBookRepository, BookRepository>();
+			services.AddScoped<ICategoryRepository, CategoryRepository>();
 		}
 		public static void ServiceInjections(this IServiceCollection services)
 		{
@@ -287,9 +288,9 @@ namespace WebApi.ExtensionMethods
 		{
 			services.AddSwaggerGen(s =>
 			{
-				s.SwaggerDoc("v1", new OpenApiInfo 
+				s.SwaggerDoc("v1", new OpenApiInfo
 				{
-					Title = "StoreApp", 
+					Title = "StoreApp",
 					Version = "v1",
 					Description = "StoreApp ASP.NET Core Web API",
 					TermsOfService = new Uri("https://www.btkakademi.gov.tr/"),
