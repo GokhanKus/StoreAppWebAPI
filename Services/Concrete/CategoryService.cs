@@ -25,9 +25,11 @@ namespace Services.Concrete
 			_mapper = mapper;
 		}
 
-		public async Task CreateOneCategoryAsync(Category category)
+		public async Task CreateOneCategoryAsync(CategoryDtoForInsertion categoryDto)
 		{
-			_manager.CategoryRepository.CreateOneCategory(category);
+			//category'nin cok propertysi olmadigi icin mapleme islemi yapmadim, yine de yapilabilir
+			var model = new Category { CategoryName = categoryDto.CategoryName, CreatedTime = DateTime.UtcNow };
+			_manager.CategoryRepository.CreateOneCategory(model); 
 			await _manager.SaveAsync();
 		}
 
