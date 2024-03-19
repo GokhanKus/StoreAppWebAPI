@@ -12,7 +12,7 @@ namespace Services.Contracts
 	{
 		Task<IEnumerable<Category>> GetAllCategoriesAsync(bool trackChanges);
 		Task<Category> GetOneCategoryByIdAsync(int id, bool trackChanges);
-		Task CreateOneCategoryAsync(CategoryDtoForInsertion categoryDto);
+		Task<Category> CreateOneCategoryAsync(CategoryDtoForInsertion categoryDto);
 		Task UpdateOneCategoryAsync(int id, CategoryDtoForUpdate categoryDto, bool trackChanges);
 		Task DeleteOneCategoryAsync(int id, bool trackChanges);
 	}

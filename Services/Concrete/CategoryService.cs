@@ -25,12 +25,13 @@ namespace Services.Concrete
 			_mapper = mapper;
 		}
 
-		public async Task CreateOneCategoryAsync(CategoryDtoForInsertion categoryDto)
+		public async Task<Category> CreateOneCategoryAsync(CategoryDtoForInsertion categoryDto)
 		{
 			//category'nin cok propertysi olmadigi icin mapleme islemi yapmadim, yine de yapilabilir
 			var model = new Category { CategoryName = categoryDto.CategoryName, CreatedTime = DateTime.UtcNow };
-			_manager.CategoryRepository.CreateOneCategory(model); 
+			_manager.CategoryRepository.CreateOneCategory(model);
 			await _manager.SaveAsync();
+			return model;
 		}
 
 		public async Task DeleteOneCategoryAsync(int id, bool trackChanges)
@@ -55,7 +56,7 @@ namespace Services.Concrete
 		public async Task UpdateOneCategoryAsync(int id, CategoryDtoForUpdate categoryDto, bool trackChanges)
 		{
 			var category = await GetOneCategoryById(id, trackChanges);
-			_mapper.Map<CategoryDtoForUpdate>(category);
+			_mapper.Map(categoryDto, category);
 			await _manager.SaveAsync();
 		}
 		private async Task<Category> GetOneCategoryById(int id, bool trackChanges)
