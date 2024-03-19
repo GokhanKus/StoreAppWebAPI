@@ -6,16 +6,17 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Repositories.Context
 {
-    public class RepositoryContext : IdentityDbContext<User>
-    {
-        public RepositoryContext(DbContextOptions<RepositoryContext> options) : base(options) //base ifadesi dbcontexti temsil ediyor, dbcontextteki baglanti dizesini kullanacagimizi belirtiyorz.
-        {
+	public class RepositoryContext : IdentityDbContext<User>
+	{
+		public RepositoryContext(DbContextOptions<RepositoryContext> options) : base(options) //base ifadesi dbcontexti temsil ediyor, dbcontextteki baglanti dizesini kullanacagimizi belirtiyorz.
+		{
 
-        }
-        public DbSet<Book> Books { get; set; }
+		}
+		public DbSet<Book> Books { get; set; }
+		public DbSet<Category> Categories { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
 			/*
 			IdentityDbContext'ten kalitim aldiktan sonra migration alirken;
 			"Unable to create a 'DbContext' of type ''.The exception 'The entity type 'IdentityUserLogin<string>' requires a primary key to be defined.
@@ -24,10 +25,10 @@ namespace Repositories.Context
             base.OnModelCreating(modelBuilder); yaziyoruz.
 			*/
 			base.OnModelCreating(modelBuilder);
-            //BookConfig seeding classını calistirir.
-            //modelBuilder.ApplyConfiguration(new BookConfig()); 
-            //modelBuilder.ApplyConfiguration(new RoleConfig());
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); //butun seed datalari calistirir
-        }
-    }
+			//BookConfig seeding classını calistirir.
+			//modelBuilder.ApplyConfiguration(new BookConfig()); 
+			//modelBuilder.ApplyConfiguration(new RoleConfig());
+			modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); //butun seed datalari calistirir
+		}
+	}
 }
