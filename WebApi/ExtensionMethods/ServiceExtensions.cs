@@ -40,6 +40,7 @@ namespace WebApi.ExtensionMethods
 		{
 			services.AddScoped<IServiceManager, ServiceManager>();
 			services.AddScoped<IBookService, BookService>();
+			services.AddScoped<ICategoryService, CategoryService>();
 			services.AddScoped<IAuthService, AuthService>();
 		}
 		public static void LoggerServiceInjections(this IServiceCollection services)

@@ -11,13 +11,16 @@ namespace Services.Concrete
 	public class ServiceManager : IServiceManager
 	{
 		private readonly IBookService _bookService;
+		private readonly ICategoryService _categoryService;
 		private readonly IAuthService _authService;
-		public ServiceManager(IBookService bookService, IAuthService authService)
+		public ServiceManager(IBookService bookService, IAuthService authService, ICategoryService categoryService)
 		{
 			_bookService = bookService;
 			_authService = authService;
+			_categoryService = categoryService;
 		}
 		public IBookService BookService => _bookService;
+		public ICategoryService CategoryService => _categoryService;
 		public IAuthService AuthService => _authService;
 	}
 }
