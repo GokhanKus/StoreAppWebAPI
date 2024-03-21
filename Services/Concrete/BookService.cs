@@ -21,15 +21,20 @@ namespace Services.Concrete
 		//private readonly ILoggerService _logger;
 		private readonly IMapper _mapper;
 		private readonly IBookLinks _bookLinks;
-		public BookService(IRepositoryManager manager, IBookLinks bookLinks, IMapper mapper)
+		private readonly ICategoryService _categoryService; //bookservice'de category ile islem yapacaksak _manager.CategoryRepository ile repo'ya gitmek yerine category service'ye gidelim
+		public BookService(IRepositoryManager manager, IBookLinks bookLinks, IMapper mapper, ICategoryService categoryService)
 		{
 			_manager = manager;
 			//_logger = logger;
 			_mapper = mapper;
 			_bookLinks = bookLinks;
+			_categoryService = categoryService;
 		}
 		public async Task<BookDto> CreateOneBookAsync(BookDtoForInsertion bookDto)
 		{
+			//TODO: create isleminde categoryid yaptigimiz gibi update icin de yap
+			var category = await _categoryService.GetOneCategoryByIdAsync(bookDto.CategoryId, false);
+
 			var model = _mapper.Map<Book>(bookDto);
 			_manager.BookRepository.CreateOneBook(model);
 			await _manager.SaveAsync();
