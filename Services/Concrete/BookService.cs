@@ -59,6 +59,11 @@ namespace Services.Concrete
 			return books;
 		}
 
+		public async Task<IEnumerable<Book>> GetAllBooksWithDetails(bool trackChanges)
+		{
+			return await _manager.BookRepository.GetAllBooksWithDetailsAsync(trackChanges);
+		}
+
 		public async Task<BookDto> GetOneBookByIdAsync(int id, bool trackChanges)
 		{
 			var book = await GetOneBookByIdAndCheckExists(id, trackChanges);

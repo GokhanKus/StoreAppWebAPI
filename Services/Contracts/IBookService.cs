@@ -22,6 +22,8 @@ namespace Services.Contracts
 		Task<(BookDtoForUpdate bookDtoForUpdate, Book book)> GetOneBookForPatchAsync(int id, bool trackChanges); //tuple, geriye donus yapacagim tipler:BookDtoForUpdate ve Book
 																												 //Tuple<(BookDtoForUpdate bookDtoForUpdate, Book book)> GetOneBookForPatch(int id, bool trackChanges); ustekiyle ayni yazim
 		Task SaveChangesForPatchAsync(BookDtoForUpdate bookDtoForUpdate, Book book);
+
+		Task <IEnumerable<Book>> GetAllBooksWithDetails(bool trackChanges);
 	}
 }
 /*
