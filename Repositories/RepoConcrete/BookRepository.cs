@@ -47,8 +47,8 @@ namespace Repositories.RepoConcrete
 
 		public async Task<IEnumerable<Book>> GetAllBooksWithDetailsAsync(bool trackChanges)
 		{
-			//return await FindAll(trackChanges).Include(b=>b.Category).ToListAsync();
-			return await _context.Books.Include(b => b.Category).OrderBy(b => b.Id).ToListAsync();
+			return await FindAll(trackChanges).Include(b => b.Category).ToListAsync();
+			//return await _context.Books.Include(b => b.Category).OrderBy(b => b.Id).ToListAsync();
 		}
 	}
 }
