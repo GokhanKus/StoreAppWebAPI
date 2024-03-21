@@ -12,7 +12,7 @@ using Repositories.Context;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20240311103658_InitialCreate")]
+    [Migration("20240321091715_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -33,6 +33,9 @@ namespace WebApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
@@ -45,36 +48,82 @@ namespace WebApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Books");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            CreatedTime = new DateTime(2024, 3, 11, 13, 36, 58, 300, DateTimeKind.Local).AddTicks(4559),
+                            CategoryId = 2,
+                            CreatedTime = new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(2442),
                             Price = 60.5m,
                             Title = "Hacigoz ve Karivat"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedTime = new DateTime(2024, 3, 11, 13, 36, 58, 300, DateTimeKind.Local).AddTicks(4563),
+                            CategoryId = 3,
+                            CreatedTime = new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(2448),
                             Price = 150m,
                             Title = "Tufek, Mikrop ve Celik"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedTime = new DateTime(2024, 3, 11, 13, 36, 58, 300, DateTimeKind.Local).AddTicks(4565),
+                            CategoryId = 1,
+                            CreatedTime = new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(2450),
                             Price = 250m,
                             Title = "Devlet"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedTime = new DateTime(2024, 3, 11, 13, 36, 58, 300, DateTimeKind.Local).AddTicks(4567),
+                            CategoryId = 3,
+                            CreatedTime = new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(2452),
                             Price = 45m,
                             Title = "Mesnevi"
+                        });
+                });
+
+            modelBuilder.Entity("Entities.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryName = "Psychology Thriller",
+                            CreatedTime = new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(3901)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryName = "Adventure",
+                            CreatedTime = new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(3903)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoryName = "History",
+                            CreatedTime = new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(3905)
                         });
                 });
 
@@ -126,6 +175,12 @@ namespace WebApi.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -174,6 +229,26 @@ namespace WebApi.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "53f6f7ce-289c-44ca-8888-a0c53044eac9",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        },
+                        new
+                        {
+                            Id = "208695ad-25dc-44ae-9409-9d136ba52344",
+                            Name = "Editor",
+                            NormalizedName = "EDITOR"
+                        },
+                        new
+                        {
+                            Id = "1078bdc5-679b-425c-8390-a5b54ad3f530",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -282,6 +357,15 @@ namespace WebApi.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Entities.Models.Book", b =>
+                {
+                    b.HasOne("Entities.Models.Category", "Category")
+                        .WithMany("Books")
+                        .HasForeignKey("CategoryId");
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -331,6 +415,11 @@ namespace WebApi.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Entities.Models.Category", b =>
+                {
+                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }

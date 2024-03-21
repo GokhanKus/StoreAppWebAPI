@@ -9,5 +9,8 @@ namespace Entities.Models
 	public class Category : BaseEntity
 	{
 		public string? CategoryName { get; set; }
+
+		//Ref: Navigation Property
+		public ICollection<Book>? Books { get; set; }
 	}
 }

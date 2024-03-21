@@ -34,6 +34,8 @@ namespace WebApi.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -55,18 +57,17 @@ namespace WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Books",
+                name: "Categories",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Books", x => x.Id);
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -175,15 +176,56 @@ namespace WebApi.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Books",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: true),
+                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Books", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Books_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.InsertData(
-                table: "Books",
-                columns: new[] { "Id", "CreatedTime", "Price", "Title" },
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 3, 11, 13, 36, 58, 300, DateTimeKind.Local).AddTicks(4559), 60.5m, "Hacigoz ve Karivat" },
-                    { 2, new DateTime(2024, 3, 11, 13, 36, 58, 300, DateTimeKind.Local).AddTicks(4563), 150m, "Tufek, Mikrop ve Celik" },
-                    { 3, new DateTime(2024, 3, 11, 13, 36, 58, 300, DateTimeKind.Local).AddTicks(4565), 250m, "Devlet" },
-                    { 4, new DateTime(2024, 3, 11, 13, 36, 58, 300, DateTimeKind.Local).AddTicks(4567), 45m, "Mesnevi" }
+                    { "1078bdc5-679b-425c-8390-a5b54ad3f530", null, "Admin", "ADMIN" },
+                    { "208695ad-25dc-44ae-9409-9d136ba52344", null, "Editor", "EDITOR" },
+                    { "53f6f7ce-289c-44ca-8888-a0c53044eac9", null, "User", "USER" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "CategoryName", "CreatedTime" },
+                values: new object[,]
+                {
+                    { 1, "Psychology Thriller", new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(3901) },
+                    { 2, "Adventure", new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(3903) },
+                    { 3, "History", new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(3905) }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Books",
+                columns: new[] { "Id", "CategoryId", "CreatedTime", "Price", "Title" },
+                values: new object[,]
+                {
+                    { 1, 2, new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(2442), 60.5m, "Hacigoz ve Karivat" },
+                    { 2, 3, new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(2448), 150m, "Tufek, Mikrop ve Celik" },
+                    { 3, 1, new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(2450), 250m, "Devlet" },
+                    { 4, 3, new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(2452), 45m, "Mesnevi" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -224,6 +266,11 @@ namespace WebApi.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Books_CategoryId",
+                table: "Books",
+                column: "CategoryId");
         }
 
         /// <inheritdoc />
@@ -252,6 +299,9 @@ namespace WebApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

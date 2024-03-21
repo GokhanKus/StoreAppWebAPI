@@ -30,6 +30,9 @@ namespace WebApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
@@ -42,34 +45,40 @@ namespace WebApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Books");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            CreatedTime = new DateTime(2024, 3, 19, 13, 6, 31, 806, DateTimeKind.Local).AddTicks(4902),
+                            CategoryId = 2,
+                            CreatedTime = new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(2442),
                             Price = 60.5m,
                             Title = "Hacigoz ve Karivat"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedTime = new DateTime(2024, 3, 19, 13, 6, 31, 806, DateTimeKind.Local).AddTicks(4906),
+                            CategoryId = 3,
+                            CreatedTime = new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(2448),
                             Price = 150m,
                             Title = "Tufek, Mikrop ve Celik"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedTime = new DateTime(2024, 3, 19, 13, 6, 31, 806, DateTimeKind.Local).AddTicks(4908),
+                            CategoryId = 1,
+                            CreatedTime = new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(2450),
                             Price = 250m,
                             Title = "Devlet"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedTime = new DateTime(2024, 3, 19, 13, 6, 31, 806, DateTimeKind.Local).AddTicks(4909),
+                            CategoryId = 3,
+                            CreatedTime = new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(2452),
                             Price = 45m,
                             Title = "Mesnevi"
                         });
@@ -99,19 +108,19 @@ namespace WebApi.Migrations
                         {
                             Id = 1,
                             CategoryName = "Psychology Thriller",
-                            CreatedTime = new DateTime(2024, 3, 19, 13, 6, 31, 806, DateTimeKind.Local).AddTicks(6538)
+                            CreatedTime = new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(3901)
                         },
                         new
                         {
                             Id = 2,
                             CategoryName = "Adventure",
-                            CreatedTime = new DateTime(2024, 3, 19, 13, 6, 31, 806, DateTimeKind.Local).AddTicks(6540)
+                            CreatedTime = new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(3903)
                         },
                         new
                         {
                             Id = 3,
                             CategoryName = "History",
-                            CreatedTime = new DateTime(2024, 3, 19, 13, 6, 31, 806, DateTimeKind.Local).AddTicks(6542)
+                            CreatedTime = new DateTime(2024, 3, 21, 12, 17, 15, 306, DateTimeKind.Local).AddTicks(3905)
                         });
                 });
 
@@ -221,19 +230,19 @@ namespace WebApi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "332962f5-3c90-4e02-b272-5618a7d87649",
+                            Id = "53f6f7ce-289c-44ca-8888-a0c53044eac9",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "d055cc9c-4c6f-44f2-a011-706f6a834250",
+                            Id = "208695ad-25dc-44ae-9409-9d136ba52344",
                             Name = "Editor",
                             NormalizedName = "EDITOR"
                         },
                         new
                         {
-                            Id = "d50eaf2d-d3d6-4815-8baa-1d0aeb596906",
+                            Id = "1078bdc5-679b-425c-8390-a5b54ad3f530",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -345,6 +354,15 @@ namespace WebApi.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Entities.Models.Book", b =>
+                {
+                    b.HasOne("Entities.Models.Category", "Category")
+                        .WithMany("Books")
+                        .HasForeignKey("CategoryId");
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -394,6 +412,11 @@ namespace WebApi.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Entities.Models.Category", b =>
+                {
+                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }
