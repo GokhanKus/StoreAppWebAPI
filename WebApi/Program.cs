@@ -2,6 +2,7 @@ using Asp.Versioning.ApiExplorer;
 using AspNetCoreRateLimit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using NLog;
 using Repositories.Context;
 using Services.Contracts;
@@ -25,8 +26,8 @@ namespace WebApi
 			})
 			.AddXmlDataContractSerializerFormatters() //xml dosya formatini kabul edecegimizi ve bu formatta output verilebilecegini belirtiyoruz(expandoObject'ten sonra format bozuldu)
 			.AddCustomCsvFormatter()                    //kendi yazmis oldugumuz custom csvformatter (expandoObject'ten sonra bu format calismiyor(cunku metottaki <bookDto> tipinde))
-			.AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
-			//.AddNewtonsoftJson();
+			.AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly)
+			.AddNewtonsoftJson(opt=>opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
 			builder.Services.Configure<ApiBehaviorOptions>(options => //[ApiController] attribute ile beraberinde gelir (ApiBehaviorOptions)
 			{

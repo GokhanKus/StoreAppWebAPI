@@ -11,6 +11,8 @@ namespace Entities.Models
 		public string? CategoryName { get; set; }
 
 		//Ref: Navigation Property
-		public ICollection<Book>? Books { get; set; }
+		//public ICollection<Book>? Books { get; set; }
+		//bunu yazmasak da olur; yani kitaplarin listesini getirirken bir kitabin ait oldugu category gelirken,
+		//o kategoriye ait diger kitaplar da geliyor bunu istemeyebiliriz.
 	}
 }
